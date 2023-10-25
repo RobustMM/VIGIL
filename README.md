@@ -1,1 +1,1 @@
-# DomainGeneralization
+# Vision-Language Generalizable Intelligence Library
