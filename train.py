@@ -37,6 +37,10 @@ def get_args():
         default="./output/"
     )
     parser.add_argument(
+        "--model",
+        type=str
+    )
+    parser.add_argument(
         "--epoch",
         type=int,
         default=10
