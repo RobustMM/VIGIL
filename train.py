@@ -31,6 +31,26 @@ def get_args():
         type=str,
         default="./data/"
     )
+    parser.add_argument(
+        "--outputs",
+        type=str,
+        default="./output/"
+    )
+    parser.add_argument(
+        "--epoch",
+        type=int,
+        default=10
+    )
+    parser.add_argument(
+        "--batch_size",
+        type=int,
+        default=32
+    )
+    parser.add_argument(
+        "--lr",
+        type=float,
+        default=5e-5
+    )
 
     return parser.parse_args()
 
