@@ -2,10 +2,12 @@ from yacs.config import CfgNode as CN
 
 
 def get_cfg_default():
+    # ====================
+    # Global CfgNode
+    # ====================
     _C = CN()
-    _C.OUTPUT = "./output/"
+    _C.OUTPUTS = "./outputs/"
     _C.SEED = -1
-    _C.USE_CUDA = True
 
     # ====================
     # Input CfgNode
@@ -33,11 +35,11 @@ def get_cfg_default():
     _C.DATALOADER.NUM_WORKERS = 4
     # Setting for the train data loader
     _C.DATALOADER.TRAIN = CN()
-    _C.DATALOADER.TRAIN.SAMPLER = "Random"
+    _C.DATALOADER.TRAIN.SAMPLER = "RandomSampler"
     _C.DATALOADER.TRAIN.BATCH_SIZE = 32
     # Setting for the test data loader
     _C.DATALOADER.TEST = CN()
-    _C.DATALOADER.TEST.SAMPLER = "Sequential"
+    _C.DATALOADER.TEST.SAMPLER = "SequentialSampler"
     _C.DATALOADER.TEST.BATCH_SIZE = 64
 
     # ====================
@@ -45,15 +47,14 @@ def get_cfg_default():
     # ====================
     _C.MODEL = CN()
     _C.MODEL.NAME = "LinearProbe"
-    _C.MODEL.BACKBONE = CN()
-    _C.MODEL.BACKBONE.NAME = "CLIP"
+    _C.MODEL.BACKBONE = "CLIP"
 
     # ====================
     # Optimizer CfgNode
     # ====================
     _C.OPTIM = CN()
     _C.OPTIM.NAME = "SGD"
-    _C.OPTIM.LR = 5e5,
+    _C.OPTIM.LR = 5e-5
     _C.OPTIM.WEIGHT_DECAY = 5e-4
     _C.OPTIM.MOMENTUM = 0.9
     _C.OPTIM.BETA1 = 0.9

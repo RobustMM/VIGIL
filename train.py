@@ -37,7 +37,7 @@ def get_args():
     parser.add_argument(
         "--outputs",
         type=str,
-        default="./output/"
+        default="./outputs/"
     )
     parser.add_argument(
         "--model",
@@ -62,8 +62,49 @@ def get_args():
     return parser.parse_args()
 
 
+def reset_cfg_from_args(cfg, args):
+    # ====================
+    # Reset Global CfgNode
+    # ====================
+    cfg.GPU = args.gpu
+    cfg.OUTPUTS = args.outputs
+    cfg.SEED = args.seed
+    cfg.DATASET.ROOT = args.root
+
+    # ====================
+    # Reset Dataset CfgNode
+    # ====================
+    if args.dataset:
+        cfg.DATASET.NAME = args.dataset
+    if args.source_domain:
+        cfg.DATASET.SOURCE_DOMAIN = args.source_domain
+    if args.target_domain:
+        cfg.DATASET.TARGET_DOMAIN = args.target_domain
+
+    # ====================
+    # Reset DataLoader CfgNode
+    # ====================
+    cfg.DATALOADER.TRAIN.BATCH_SIZE = args.batch_size
+
+    # ====================
+    # Reset Model CfgNode
+    # ====================
+    if args.model:
+        cfg.MODEL.NAME = args.model
+
+    # ====================
+    # Reset Optimizer CfgNode
+    # ====================
+    cfg.OPTIM.EPOCH = args.epoch
+    cfg.OPTIM.LR = args.lr
+
+
 def setup_cfg(args):
     cfg = get_cfg_default()
+
+    reset_cfg_from_args(cfg, args)
+
+    cfg.freeze()
 
     return cfg
 
