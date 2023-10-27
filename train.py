@@ -1,15 +1,14 @@
 import argparse
-import torch
 
-from utils.config_default import get_cfg_default
+from utils import get_cfg_default, set_random_seed, set_device
 
 
 def get_args():
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--gpu",
-        type=str,
-        default="0"
+        type=int,
+        default=0
     )
     parser.add_argument(
         "--seed",
@@ -113,10 +112,17 @@ def main(args):
     # torch.set_num_threads(1)  # This limits threads to avoid server crash
 
     cfg = setup_cfg(args)
+
+    if cfg.SEED >= 0:
+        set_random_seed(cfg.SEED)
+
+    set_device(cfg.GPU)
+    setup_logger(cfg.OUTPUTS)
+
+    print("*** Config ***")
     print(cfg)
 
 
 if __name__ == "__main__":
     args = get_args()
-    print(args)
     main(args)
