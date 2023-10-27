@@ -3,6 +3,7 @@ import torch
 
 from utils.config_default import get_cfg_default
 
+
 def get_args():
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -59,6 +60,7 @@ def get_args():
     )
 
     return parser.parse_args()
+
 
 def setup_cfg(args):
     cfg = get_cfg_default()
