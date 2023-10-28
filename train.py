@@ -1,5 +1,6 @@
 import argparse
 
+from trainer import build_trainer
 from utils import get_cfg_default, set_random_seed, set_device, setup_logger
 
 
@@ -122,6 +123,9 @@ def main(args):
     # print("*** Config ***")
     # print(cfg)
 
+    trainer = build_trainer(cfg)
+    # TODO: trainer.train()
+    # trainer.train()
 
 if __name__ == "__main__":
     args = get_args()
