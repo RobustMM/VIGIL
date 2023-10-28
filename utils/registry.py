@@ -38,8 +38,11 @@ class Registry:
         self._obj_map = dict()
 
     def _do_register(self, name, obj):
-        assert (name not in self._obj_map), "An object named '{}' was already registered in '{}' registry!".format(
-            name, self._name)
+        assert (
+            name not in self._obj_map
+            ), "An object named '{}' was already registered in '{}' registry!".format(
+            name, self._name
+            )
         self._obj_map[name] = obj
 
     def register(self, obj):
@@ -48,4 +51,25 @@ class Registry:
         Can be used as either a decorator or not. See docstring of this class for usage.
         """
         if obj is None:
-            
+            # use as a decorator
+            def deco(func_or_class):
+                name = func_or_class.__name__
+                self._do_register(name, func_or_class)
+                return func_or_class
+
+            return deco
+
+        # used as a function call
+        name = obj.__name__
+        self._do_register(name, obj)
+
+    def get(self, name):
+        ret = self._obj_map.get(name)
+        if ret is None:
+            raise KeyError(
+                "No object named '{}' found in '{}' registry!".format(name, self._name)
+            )
+        return ret
+
+    def registered_names(self):
+        return list(self._obj_map.keys())
