@@ -1,6 +1,7 @@
-# import os
+import os
 import os.path as osp
 import sys
+import time
 
 from .tools import mkdir_if_missing
 
@@ -26,7 +27,26 @@ class Logger:
         self.file = None
         if fpath is not None:
             mkdir_if_missing(osp.dirname(fpath))
+            self.file = open(fpath, "w")
+
+    def write(self, msg):
+        self.console.write(msg)
+        if self.file is not None:
+            self.file.write(msg)
+
+    def flush(self):
+        self.console.flush()
+        if self.file is not None:
+            self.file.flush()
+            os.fsync(self.file.fileno())
+
+    def close(self):
+        self.console.close()
+        if self.file is not None:
+            self.file.close()
 
 
-def setup_logger(output_path):
-    print(output_path)
+def setup_logger(outputs_path):
+    fpath = osp.join(outputs_path, (time.strftime("%Y-%m-%d-%H-%M-%S") + ".log"))
+
+    sys.stdout = Logger(fpath)
