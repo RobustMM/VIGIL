@@ -1,4 +1,7 @@
+import errno
 import numpy as np
+import os
+import os.path as osp
 import random
 import torch
 
@@ -14,3 +17,12 @@ def set_random_seed(seed):
 
 def set_device(gpu_id):
     torch.cuda.set_device(gpu_id)
+
+
+def mkdir_if_missing(dir):
+    if not osp.exists(dir):
+        try:
+            os.makedirs(dir)
+        except OSError as e:
+            if e.errno != errno.EEXIST:
+                raise

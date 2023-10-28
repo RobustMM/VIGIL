@@ -1,6 +1,6 @@
 import argparse
 
-from utils import get_cfg_default, set_random_seed, set_device
+from utils import get_cfg_default, set_random_seed, set_device, setup_logger
 
 
 def get_args():
@@ -119,8 +119,8 @@ def main(args):
     set_device(cfg.GPU)
     setup_logger(cfg.OUTPUTS)
 
-    print("*** Config ***")
-    print(cfg)
+    # print("*** Config ***")
+    # print(cfg)
 
 
 if __name__ == "__main__":
