@@ -120,12 +120,13 @@ def main(args):
     set_device(cfg.GPU)
     setup_logger(cfg.OUTPUTS)
 
-    print("*** Config ***")
-    print(cfg)
+    # print("*** Config ***")
+    # print(cfg)
 
     trainer = build_trainer(cfg)
     # TODO: trainer.train()
     # trainer.train()
+
 
 if __name__ == "__main__":
     args = get_args()
