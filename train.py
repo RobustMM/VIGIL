@@ -124,8 +124,7 @@ def main(args):
     # print(cfg)
 
     trainer = build_trainer(cfg)
-    # TODO: trainer.train()
-    # trainer.train()
+    trainer.train()
 
 
 if __name__ == "__main__":

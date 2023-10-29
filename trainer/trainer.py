@@ -20,6 +20,9 @@ class Trainer():
 
         # TODO: Build Evaluator
 
+    def build_model(self):
+        raise NotImplementedError
+
     def detect_abnormal_loss(self, loss):
         if not torch.isfinite(loss).all():
             raise FloatingPointError("Loss is Infinite or NaN.")
@@ -29,5 +32,48 @@ class Trainer():
             print("Initializing Summary Writer with log_dir={}".format(log_dir))
             self._writer = SummaryWriter(log_dir=log_dir)
 
-    def save_model(self, directory):
+    def close_writer(self):
+        if self._writer is not None:
+            self._writer.close()
+
+    def write_scalar(self, tag, scalar_value, global_step=None):
+        if self._writer is not None:
+            self._writer.add_scalar(tag, scalar_value, global_step)
+
+    def train(self):
+        self.before_train()
+        for self.current_epoch in range(self.epoch):
+            self.before_epoch()
+            self.run_epoch()
+            self.after_epoch()
+        self.after_train()
+
+    def before_train(self):
+        pass
+
+    def after_train(self):
+        pass
+
+    def before_epoch(self):
+        pass
+
+    def after_epoch(self):
+        pass
+
+    def run_epoch(self):
+        raise NotImplementedError
+
+    def test(self):
+        raise NotImplementedError
+
+    def parse_barch_train(self, batch_data):
+        raise NotImplementedError
+
+    def parse_batch_test(self, batch_data):
+        raise NotImplementedError
+
+    def forward_backward(self, batch_data):
+        raise NotImplementedError
+
+    def save_model(self):
         raise NotImplementedError
