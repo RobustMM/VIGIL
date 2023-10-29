@@ -6,6 +6,7 @@ class ClipModel(Trainer):
 
     def build_model(self):
         print("Build Model")
+        self.model = "CLIP"
 
-    def forward_backward(self, batch_data):
-        print("Forward")
+    def test(self):
+        print("Strat Evaluation")

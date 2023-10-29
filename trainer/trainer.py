@@ -1,3 +1,4 @@
+import time
 import torch
 
 from torch.utils.tensorboard import SummaryWriter
@@ -49,19 +50,24 @@ class Trainer():
         self.after_train()
 
     def before_train(self):
-        pass
+        # Initialize SummaryWriter
+        # writer_dir = osp.join(self.output_dir, "tensorboard")
+        # mkdir_if_missing(writer_dir)
+        # self.init_writer(writer_dir)
+        self.time_start = time.time()
 
     def after_train(self):
-        pass
+        # self.save_model()
+        self.test()
+    # TODO: run_epoch()
+    def run_epoch(self):
+        print(self.current_epoch)
 
     def before_epoch(self):
         pass
 
     def after_epoch(self):
         pass
-
-    def run_epoch(self):
-        raise NotImplementedError
 
     def test(self):
         raise NotImplementedError
@@ -73,6 +79,12 @@ class Trainer():
         raise NotImplementedError
 
     def forward_backward(self, batch_data):
+        raise NotImplementedError
+
+    def model_inference(self, input_data):
+        raise NotImplementedError
+
+    def get_current_lr(self):
         raise NotImplementedError
 
     def save_model(self):
