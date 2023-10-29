@@ -47,7 +47,7 @@ def get_cfg_default():
     # ====================
     _C.MODEL = CN()
     _C.MODEL.NAME = "LinearProbe"
-    _C.MODEL.BACKBONE = "CLIP"
+    _C.MODEL.BACKBONE = "RN50"
 
     # ====================
     # Optimizer CfgNode

@@ -18,6 +18,7 @@ class Trainer():
 
         # TODO: Build Model
         self.build_model()
+        exit()
 
         # TODO: Build Evaluator
 
@@ -59,6 +60,7 @@ class Trainer():
     def after_train(self):
         # self.save_model()
         self.test()
+
     # TODO: run_epoch()
     def run_epoch(self):
         print(self.current_epoch)

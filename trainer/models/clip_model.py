@@ -1,3 +1,5 @@
+import clip
+
 from trainer import MODEL_REGISTERY, Trainer
 
 
@@ -5,8 +7,9 @@ from trainer import MODEL_REGISTERY, Trainer
 class ClipModel(Trainer):
 
     def build_model(self):
-        print("Build Model")
-        self.model = "CLIP"
+        self.model, self.preprocess = clip.load(self.cfg.MODEL.BACKBONE, device="cuda", jit=False)
+        self.model.eval()
+        self.model.to(self.device)
 
     def test(self):
         print("Strat Evaluation")
