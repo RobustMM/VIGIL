@@ -1,8 +1,8 @@
-from trainer import MODEL_REGISTERY, GenericTrainer
+from trainer import MODEL_REGISTERY, Trainer
 
 
 @MODEL_REGISTERY.register()
-class ClipModel(GenericTrainer):
+class ClipModel(Trainer):
 
     def build_model(self):
         print("Build Model")
