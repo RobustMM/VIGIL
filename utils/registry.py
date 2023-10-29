@@ -45,7 +45,7 @@ class Registry:
             )
         self._obj_map[name] = obj
 
-    def register(self, obj):
+    def register(self, obj=None):
         """
         Register the given object under the the name `obj.__name__`.
         Can be used as either a decorator or not. See docstring of this class for usage.
