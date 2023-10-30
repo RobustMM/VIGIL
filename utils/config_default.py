@@ -15,7 +15,7 @@ def get_cfg_default():
     _C.INPUT = CN()
     _C.INPUT.SIZE = (224, 224)
     _C.INPUT.INTERPOLATION = "bilinear"
-    _C.INPUT.TRANSFORMS = ["normalize"]
+    _C.INPUT.TRANSFORMS = []
     _C.INPUT.PIXEL_MEAN = [0.485, 0.456, 0.406]
     _C.INPUT.PIXEL_STD = [0.229, 0.224, 0.225]
     # Transform Setting
@@ -70,8 +70,8 @@ def get_cfg_default():
     # Model CfgNode
     # ====================
     _C.MODEL = CN()
-    _C.MODEL.NAME = "LinearProbe"
-    _C.MODEL.BACKBONE = "ViT-B/32"
+    _C.MODEL.NAME = ""
+    _C.MODEL.BACKBONE = ""
 
     # ====================
     # Optimizer CfgNode
