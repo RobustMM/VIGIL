@@ -1,7 +1,7 @@
 import argparse
 
 from trainer import build_trainer
-from utils import get_cfg_default, set_random_seed, set_device, setup_logger
+from utils import collect_env_info, get_cfg_default, set_random_seed, setup_logger
 
 
 def reset_cfg_from_args(cfg, args):
@@ -43,6 +43,20 @@ def setup_cfg(args):
     return cfg
 
 
+def print_args(args, cfg):
+    print("***************")
+    print("** Arguments **")
+    print("***************")
+    optkeys = list(args.__dict__.keys())
+    optkeys.sort()
+    for key in optkeys:
+        print("{}: {}".format(key, args.__dict__[key]))
+    print("************")
+    print("** Config **")
+    print("************")
+    print(cfg)
+
+
 def main(args):
     cfg = setup_cfg(args)
 
@@ -51,8 +65,11 @@ def main(args):
 
     setup_logger(cfg.OUTPUT_DIR)
 
-    print("*** Config ***")
-    print(cfg)
+    # print("*** Config ***")
+    # print_args(args, cfg)
+
+    # print("Collecting env info ...")
+    # print("** System info **\n{}\n".format(collect_env_info()))
 
     trainer = build_trainer(cfg)
     trainer.train()
@@ -60,66 +77,14 @@ def main(args):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "--gpu",
-        type=int,
-        default=0
-    )
-    parser.add_argument(
-        "--seed",
-        type=int,
-        default=42
-    )
-    parser.add_argument(
-        "--root",
-        type=str,
-        default="./data/"
-    )
-    parser.add_argument(
-        "--output-dir",
-        type=str,
-        default="./output/"
-    )
-    parser.add_argument(
-        "--dataset",
-        type=str
-    )
-    parser.add_argument(
-        "--source-domains",
-        type=str,
-        nargs="+",
-    )
-    parser.add_argument(
-        "--target-domains",
-        type=str,
-        nargs="+"
-    )
-    parser.add_argument(
-        "--model",
-        type=str
-    )
-    # parser.add_argument(
-    #     "--backbone",
-    #     type=str
-    # )
-    # parser.add_argument(
-    #     "--max-epoch",
-    #     type=int,
-    #     default=10
-    # )
-    # parser.add_argument(
-    #     "--batch-size",
-    #     type=int,
-    #     default=32
-    # )
-    # parser.add_argument(
-    #     "--lr",
-    #     type=float,
-    #     default=5e-5
-    # )
-    parser.add_argument(
-        "--model-config-file",
-        type=str
-    )
+    parser.add_argument("--gpu", type=int, default=0)
+    parser.add_argument("--seed", type=int, default=42)
+    parser.add_argument("--root", type=str, default="./data/")
+    parser.add_argument("--output-dir", type=str, default="./output/")
+    parser.add_argument("--dataset", type=str)
+    parser.add_argument("--source-domains", type=str, nargs="+")
+    parser.add_argument("--target-domains", type=str, nargs="+")
+    parser.add_argument("--model", type=str)
+    parser.add_argument("--model-config-file", type=str)
     args = parser.parse_args()
     main(args)

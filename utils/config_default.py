@@ -40,8 +40,8 @@ def get_cfg_default():
     # Random Gray Scale's Probability
     _C.INPUT.RGS_P = 0.2
     # Gaussian Blur
-    _C.INPUT.GB_P = 0.5     # Probability of Applying Gaussian Blur
-    _C.INPUT.GB_K = 21      # Kernel Size (Should be an Odd Number)
+    _C.INPUT.GB_P = 0.5  # Probability of Applying Gaussian Blur
+    _C.INPUT.GB_K = 21  # Kernel Size (Should be an Odd Number)
 
     # ====================
     # Dataset CfgNode
@@ -85,12 +85,14 @@ def get_cfg_default():
     _C.OPTIM.ADAM_BETA2 = 0.999
     _C.OPTIM.LR_SCHEDULER = "cosine"
     _C.OPTIM.STEP_SIZE = -1
-    _C.OPTIM.GAMMA = 0.1                # Factor to reduce learning rate
+    _C.OPTIM.GAMMA = 0.1  # Factor to reduce learning rate
     _C.OPTIM.MAX_EPOCH = 10
-    _C.OPTIM.WARMUP_EPOCH = -1          # Set WARMUP_EPOCH larger than 0 to activate warmup training
-    _C.OPTIM.WARMUP_TYPE = "linear"     # Either linear or constant
-    _C.OPTIM.WARMUP_CONS_LR = 1e-5      # Constant learning rate when WARMUP_TYPE=constant
-    _C.OPTIM.WARMUP_MIN_LR = 1e-5       # Minimum learning rate when WARMUP_TYPE=linear
+    _C.OPTIM.WARMUP_EPOCH = (
+        -1
+    )  # Set WARMUP_EPOCH larger than 0 to activate warmup training
+    _C.OPTIM.WARMUP_TYPE = "linear"  # Either linear or constant
+    _C.OPTIM.WARMUP_CONS_LR = 1e-5  # Constant learning rate when WARMUP_TYPE=constant
+    _C.OPTIM.WARMUP_MIN_LR = 1e-5  # Minimum learning rate when WARMUP_TYPE=linear
 
     # ====================
     # Train CfgNode

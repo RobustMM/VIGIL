@@ -1,11 +1,13 @@
 import errno
-import numpy as np
 import os
 import os.path as osp
 import random
-import torch
-
 from difflib import SequenceMatcher
+
+import numpy as np
+import PIL
+import torch
+from torch.utils.collect_env import get_pretty_env_info
 
 
 def set_random_seed(seed):
@@ -24,6 +26,17 @@ def mkdir_if_missing(dir):
         except OSError as e:
             if e.errno != errno.EEXIST:
                 raise
+
+
+def collect_env_info():
+    """Return env info as a string.
+
+    Code source: github.com/facebookresearch/maskrcnn-benchmark
+    """
+
+    env_str = get_pretty_env_info()
+    env_str += "\n        Pillow ({})".format(PIL.__version__)
+    return env_str
 
 
 def get_most_similar_str_to_a_from_b(a, b):
