@@ -43,6 +43,8 @@ def reset_cfg_from_args(cfg, args):
 
 def setup_cfg(args):
     cfg = get_cfg_default()
+    print(cfg)
+    exit()
 
     reset_cfg_from_args(cfg, args)
 
@@ -52,8 +54,6 @@ def setup_cfg(args):
 
 
 def main(args):
-    # torch.set_num_threads(1)  # This limits threads to avoid server crash
-
     cfg = setup_cfg(args)
 
     if cfg.SEED >= 0:
@@ -89,7 +89,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--output-dir",
         type=str,
-        default="./outputs/"
+        default="./output/"
     )
     parser.add_argument(
         "--dataset",
@@ -119,7 +119,7 @@ if __name__ == "__main__":
         default=10
     )
     parser.add_argument(
-        "--batch_size",
+        "--batch-size",
         type=int,
         default=32
     )
