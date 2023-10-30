@@ -3,6 +3,8 @@ import torch
 
 from torch.utils.tensorboard import SummaryWriter
 
+from datasets import DataManager
+
 
 class Trainer():
     """Generic Trainer Class for Implementing Generic Function"""
@@ -15,6 +17,7 @@ class Trainer():
         self._writer = None
 
         # TODO: Build Data Manager
+        self.data_manager = DataManager(self.cfg)
 
         self.build_model()
 
