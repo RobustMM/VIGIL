@@ -17,10 +17,6 @@ def set_random_seed(seed):
     torch.backends.cudnn.benchmark = False
 
 
-def set_device(gpu_id):
-    torch.cuda.set_device(gpu_id)
-
-
 def mkdir_if_missing(dir):
     if not osp.exists(dir):
         try:

@@ -49,8 +49,8 @@ def get_cfg_default():
     _C.DATASET = CN()
     _C.DATASET.ROOT = ""
     _C.DATASET.NAME = ""
-    _C.DATASET.SOURCE_DOMAIN = []
-    _C.DATASET.TARGET_DOMAIN = []
+    _C.DATASET.SOURCE_DOMAINS = []
+    _C.DATASET.TARGET_DOMAINS = []
 
     # ====================
     # Dataloader CfgNode

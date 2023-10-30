@@ -9,7 +9,7 @@ def reset_cfg_from_args(cfg, args):
     # Reset Global CfgNode
     # ====================
     cfg.GPU = args.gpu
-    cfg.OUTPUTS = args.outputs
+    cfg.OUTPUT_DIR = args.output_dir
     cfg.SEED = args.seed
     cfg.DATASET.ROOT = args.root
 
@@ -18,15 +18,10 @@ def reset_cfg_from_args(cfg, args):
     # ====================
     if args.dataset:
         cfg.DATASET.NAME = args.dataset
-    if args.source_domain:
-        cfg.DATASET.SOURCE_DOMAIN = args.source_domain
-    if args.target_domain:
-        cfg.DATASET.TARGET_DOMAIN = args.target_domain
-
-    # ====================
-    # Reset DataLoader CfgNode
-    # ====================
-    cfg.DATALOADER.TRAIN.BATCH_SIZE = args.batch_size
+    if args.source_domains:
+        cfg.DATASET.SOURCE_DOMAINS = args.source_domains
+    if args.target_domains:
+        cfg.DATASET.TARGET_DOMAINS = args.target_domains
 
     # ====================
     # Reset Model CfgNode
@@ -34,17 +29,12 @@ def reset_cfg_from_args(cfg, args):
     if args.model:
         cfg.MODEL.NAME = args.model
 
-    # ====================
-    # Reset Optimizer CfgNode
-    # ====================
-    cfg.OPTIM.EPOCH = args.epoch
-    cfg.OPTIM.LR = args.lr
-
 
 def setup_cfg(args):
     cfg = get_cfg_default()
-    print(cfg)
-    exit()
+
+    if args.model_config_file:
+        cfg.merge_from_file(args.model_config_file)
 
     reset_cfg_from_args(cfg, args)
 
@@ -59,11 +49,10 @@ def main(args):
     if cfg.SEED >= 0:
         set_random_seed(cfg.SEED)
 
-    set_device(cfg.GPU)
-    setup_logger(cfg.OUTPUTS)
+    setup_logger(cfg.OUTPUT_DIR)
 
-    # print("*** Config ***")
-    # print(cfg)
+    print("*** Config ***")
+    print(cfg)
 
     trainer = build_trainer(cfg)
     trainer.train()
@@ -109,24 +98,28 @@ if __name__ == "__main__":
         "--model",
         type=str
     )
+    # parser.add_argument(
+    #     "--backbone",
+    #     type=str
+    # )
+    # parser.add_argument(
+    #     "--max-epoch",
+    #     type=int,
+    #     default=10
+    # )
+    # parser.add_argument(
+    #     "--batch-size",
+    #     type=int,
+    #     default=32
+    # )
+    # parser.add_argument(
+    #     "--lr",
+    #     type=float,
+    #     default=5e-5
+    # )
     parser.add_argument(
-        "--backbone",
+        "--model-config-file",
         type=str
-    )
-    parser.add_argument(
-        "--max-epoch",
-        type=int,
-        default=10
-    )
-    parser.add_argument(
-        "--batch-size",
-        type=int,
-        default=32
-    )
-    parser.add_argument(
-        "--lr",
-        type=float,
-        default=5e-5
     )
     args = parser.parse_args()
     main(args)
