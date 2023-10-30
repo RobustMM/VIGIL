@@ -1,4 +1,4 @@
-import clip
+# import clip
 
 from trainer import MODEL_REGISTERY, Trainer
 

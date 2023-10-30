@@ -4,64 +4,6 @@ from trainer import build_trainer
 from utils import get_cfg_default, set_random_seed, set_device, setup_logger
 
 
-def get_args():
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "--gpu",
-        type=int,
-        default=0
-    )
-    parser.add_argument(
-        "--seed",
-        type=int,
-        default=42
-    )
-    parser.add_argument(
-        "--dataset",
-        type=str
-    )
-    parser.add_argument(
-        "--source_domain",
-        type=str,
-        nargs="+",
-    )
-    parser.add_argument(
-        "--target_domain",
-        type=str
-    )
-    parser.add_argument(
-        "--root",
-        type=str,
-        default="./data/"
-    )
-    parser.add_argument(
-        "--outputs",
-        type=str,
-        default="./outputs/"
-    )
-    parser.add_argument(
-        "--model",
-        type=str
-    )
-    parser.add_argument(
-        "--epoch",
-        type=int,
-        default=10
-    )
-    parser.add_argument(
-        "--batch_size",
-        type=int,
-        default=32
-    )
-    parser.add_argument(
-        "--lr",
-        type=float,
-        default=5e-5
-    )
-
-    return parser.parse_args()
-
-
 def reset_cfg_from_args(cfg, args):
     # ====================
     # Reset Global CfgNode
@@ -128,5 +70,63 @@ def main(args):
 
 
 if __name__ == "__main__":
-    args = get_args()
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--gpu",
+        type=int,
+        default=0
+    )
+    parser.add_argument(
+        "--seed",
+        type=int,
+        default=42
+    )
+    parser.add_argument(
+        "--root",
+        type=str,
+        default="./data/"
+    )
+    parser.add_argument(
+        "--output-dir",
+        type=str,
+        default="./outputs/"
+    )
+    parser.add_argument(
+        "--dataset",
+        type=str
+    )
+    parser.add_argument(
+        "--source-domains",
+        type=str,
+        nargs="+",
+    )
+    parser.add_argument(
+        "--target-domains",
+        type=str,
+        nargs="+"
+    )
+    parser.add_argument(
+        "--model",
+        type=str
+    )
+    parser.add_argument(
+        "--backbone",
+        type=str
+    )
+    parser.add_argument(
+        "--epoch",
+        type=int,
+        default=10
+    )
+    parser.add_argument(
+        "--batch_size",
+        type=int,
+        default=32
+    )
+    parser.add_argument(
+        "--lr",
+        type=float,
+        default=5e-5
+    )
+    args = parser.parse_args()
     main(args)
