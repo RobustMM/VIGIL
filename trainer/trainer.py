@@ -16,9 +16,7 @@ class Trainer():
 
         # TODO: Build Data Manager
 
-        # TODO: Build Model
         self.build_model()
-        exit()
 
         # TODO: Build Evaluator
 

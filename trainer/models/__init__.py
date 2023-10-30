@@ -1,1 +1,1 @@
-from .clip_model import ClipModel       # noqa
+from .linear_probe import LinearProbe       # noqa
