@@ -114,7 +114,7 @@ if __name__ == "__main__":
         type=str
     )
     parser.add_argument(
-        "--epoch",
+        "--max-epoch",
         type=int,
         default=10
     )

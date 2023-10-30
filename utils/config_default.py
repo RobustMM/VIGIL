@@ -64,7 +64,7 @@ def get_cfg_default():
     # Setting for the test data loader
     _C.DATALOADER.TEST = CN()
     _C.DATALOADER.TEST.SAMPLER = "SequentialSampler"
-    _C.DATALOADER.TEST.BATCH_SIZE = 64
+    _C.DATALOADER.TEST.BATCH_SIZE = 32
 
     # ====================
     # Model CfgNode
@@ -77,16 +77,20 @@ def get_cfg_default():
     # Optimizer CfgNode
     # ====================
     _C.OPTIM = CN()
-    _C.OPTIM.NAME = "SGD"
-    _C.OPTIM.LR = 5e-5
+    _C.OPTIM.NAME = "sgd"
+    _C.OPTIM.LR = 0.0002
     _C.OPTIM.WEIGHT_DECAY = 5e-4
     _C.OPTIM.MOMENTUM = 0.9
-    _C.OPTIM.BETA1 = 0.9
-    _C.OPTIM.BETA2 = 0.999
+    _C.OPTIM.ADAM_BETA1 = 0.9
+    _C.OPTIM.ADAM_BETA2 = 0.999
     _C.OPTIM.LR_SCHEDULER = "cosine"
     _C.OPTIM.STEP_SIZE = -1
-    _C.OPTIM.GAMMA = 0.1    # Factor to reduce learning rate
-    _C.OPTIM.EPOCH = 10
+    _C.OPTIM.GAMMA = 0.1                # Factor to reduce learning rate
+    _C.OPTIM.MAX_EPOCH = 10
+    _C.OPTIM.WARMUP_EPOCH = -1          # Set WARMUP_EPOCH larger than 0 to activate warmup training
+    _C.OPTIM.WARMUP_TYPE = "linear"     # Either linear or constant
+    _C.OPTIM.WARMUP_CONS_LR = 1e-5      # Constant learning rate when WARMUP_TYPE=constant
+    _C.OPTIM.WARMUP_MIN_LR = 1e-5       # Minimum learning rate when WARMUP_TYPE=linear
 
     # ====================
     # Train CfgNode
