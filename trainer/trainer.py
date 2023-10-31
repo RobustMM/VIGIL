@@ -14,15 +14,20 @@ class Trainer:
         self.max_epoch = cfg.OPTIM.MAX_EPOCH
         self.output_dir = cfg.OUTPUT_DIR
         self.device = torch.cuda.current_device()
-        print(self.device)
+
         self._writer = None
 
         # TODO: Build Data Manager
-        # self.data_manager = DataManager(self.cfg)
+        self.build_data_loader()
 
+        exit()
+        # TODO: Build Model
         self.build_model()
 
         # TODO: Build Evaluator
+
+    def build_data_loader(self):
+        self.data_manager = DataManager(self.cfg)
 
     def build_model(self):
         raise NotImplementedError

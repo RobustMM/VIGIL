@@ -5,3 +5,4 @@ from trainer import Trainer, MODEL_REGISTERY
 class CLIPZeroshot(Trainer):
     def build_model(self):
         print("Hi")
+        exit()
