@@ -11,13 +11,14 @@ class Trainer:
 
     def __init__(self, cfg):
         self.cfg = cfg
-        self.epoch = cfg.OPTIM.EPOCH
-        self.output_dir = cfg.OUTPUTS
+        self.max_epoch = cfg.OPTIM.MAX_EPOCH
+        self.output_dir = cfg.OUTPUT_DIR
         self.device = torch.cuda.current_device()
+        print(self.device)
         self._writer = None
 
         # TODO: Build Data Manager
-        self.data_manager = DataManager(self.cfg)
+        # self.data_manager = DataManager(self.cfg)
 
         self.build_model()
 
@@ -45,7 +46,7 @@ class Trainer:
 
     def train(self):
         self.before_train()
-        for self.current_epoch in range(self.epoch):
+        for self.current_epoch in range(self.max_epoch):
             self.before_epoch()
             self.run_epoch()
             self.after_epoch()

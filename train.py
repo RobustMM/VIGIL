@@ -1,4 +1,5 @@
 import argparse
+import torch
 
 from trainer import build_trainer
 from utils import collect_env_info, get_cfg_default, set_random_seed, setup_logger  # noqa
@@ -62,6 +63,8 @@ def main(args):
 
     if cfg.SEED >= 0:
         set_random_seed(cfg.SEED)
+
+    torch.cuda.set_device(cfg.GPU)
 
     setup_logger(cfg.OUTPUT_DIR)
 
