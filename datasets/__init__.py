@@ -1,1 +1,3 @@
-from .data_manager import DataManager       # noqa
+from .data_manager import DataManager  # noqa
+
+from .dg import *  # noqa
