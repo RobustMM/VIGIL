@@ -1,12 +1,12 @@
 import time
-import torch
 
+import torch
 from torch.utils.tensorboard import SummaryWriter
 
 from datasets import DataManager
 
 
-class Trainer():
+class Trainer:
     """Generic Trainer Class for Implementing Generic Function"""
 
     def __init__(self, cfg):

@@ -1,7 +1,7 @@
 import argparse
 
 from trainer import build_trainer
-from utils import collect_env_info, get_cfg_default, set_random_seed, setup_logger
+from utils import collect_env_info, get_cfg_default, set_random_seed, setup_logger  # noqa
 
 
 def reset_cfg_from_args(cfg, args):
