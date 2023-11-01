@@ -20,5 +20,13 @@ class ImageNet(DatasetBase):
                 train = preprocessed["train"]
                 test = preprocessed["test"]
         else:
-            print("Hi")
+            text_file = os.path.join(self.dataset_dir, "classnames.txt")
+            print(text_file)
             exit()
+            classnames = self.read_classnames(text_file)
+            print(classnames)
+            exit()
+    
+    @staticmethod
+    def read_classnames(text_file):
+        pass
