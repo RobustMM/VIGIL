@@ -1,5 +1,34 @@
 class Datum:
-    pass
+
+    def __init__(self, img_path, class_label, domain_label, class_name):
+        """Data instance which defines the basic attributes.
+
+        Args:
+            img_path (str): Image path
+            class_label (int): Class label
+            domain_label (int): Domain label
+            class_name (str): Class name
+        """
+        self._img_path = img_path
+        self._class_label = class_label
+        self._domain_label = domain_label
+        self._class_name = class_name
+
+    @property
+    def img_path(self):
+        return self._img_path
+
+    @property
+    def class_label(self):
+        return self._class_label
+
+    @property
+    def domain_label(self):
+        return self._domain_label
+
+    @property
+    def class_name(self):
+        return self._class_name
 
 
 class DatasetBase:
