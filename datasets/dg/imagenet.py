@@ -10,19 +10,19 @@ from utils import listdir_nonhidden
 @DATASET_REGISTRY.register()
 class ImageNet(DatasetBase):
     def __init__(self, cfg):
-        self.dataset_dir = "imagenet"
+        self._dataset_dir = "imagenet"
         root = os.path.abspath(os.path.expanduser(cfg.DATASET.ROOT))
-        self.dataset_dir = os.path.join(root, self.dataset_dir)
-        self.image_dir = os.path.join(self.dataset_dir, "images")
-        self.preprocessed = os.path.join(self.dataset_dir, "preprocessed.pkl")
+        self._dataset_dir = os.path.join(root, self.dataset_dir)
+        self._image_dir = os.path.join(self.dataset_dir, "images")
+        self._preprocessed = os.path.join(self.dataset_dir, "preprocessed.pkl")
 
-        if os.path.exists(self.preprocessed):
+        if os.path.exists(self._preprocessed):
             with open(self.preprocessed, "rb") as f:
                 preprocessed = pickle.load(f)
                 train = preprocessed["train"]
                 test = preprocessed["test"]
         else:
-            text_file = os.path.join(self.dataset_dir, "classnames.txt")
+            text_file = os.path.join(self._dataset_dir, "classnames.txt")
             class_names = self.read_class_names(text_file)
             train = self.read_data(class_names, "train")
             # Follow standard practice to perform evaluation on the val set
@@ -51,7 +51,7 @@ class ImageNet(DatasetBase):
         return class_names
 
     def read_data(self, class_names, split_dir):
-        split_dir = os.path.join(self.image_dir, split_dir)
+        split_dir = os.path.join(self._image_dir, split_dir)
         folder_names = sorted(f.name for f in os.scandir(split_dir) if f.is_dir())
         items = []
 
