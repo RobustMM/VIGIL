@@ -53,8 +53,10 @@ class DatasetBase:
         self._val_data = val_data
         self._test_data = test_data
         self._num_classes = self.get_num_classes()
-        print("Hi")
-        exit()
+        (
+            self._class_label_name_mapping,
+            self._class_names,
+        ) = self.get_class_label_name_mapping()
 
     @property
     def dataset_dir(self):
@@ -84,9 +86,32 @@ class DatasetBase:
     def num_classes(self):
         return self._num_classes
 
+    @property
+    def class_label_name_mapping(self):
+        return self._class_label_name_mapping
+
+    @property
+    def class_names(self):
+        return self._class_names
+
     def get_num_classes(self):
         label_set = set()
         for datum in self._train_data:
             label_set.add(datum.class_label)
 
         return max(label_set) + 1
+
+    def get_class_label_name_mapping(self):
+        container = set()
+        for datum in self._train_data:
+            container.add((datum.class_label, datum.class_name))
+        class_label_name_mapping = {
+            class_label: class_name for class_label, class_name in container
+        }
+        class_labels = list(class_label_name_mapping.keys())
+        class_labels.sort()
+        class_names = [
+            class_label_name_mapping[class_label] for class_label in class_labels
+        ]
+
+        return class_label_name_mapping, class_names
