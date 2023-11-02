@@ -51,6 +51,7 @@ def get_cfg_default():
     _C.DATASET.NAME = ""
     _C.DATASET.SOURCE_DOMAINS = []
     _C.DATASET.TARGET_DOMAINS = []
+    _C.DATASET.SUBSAMPLE_CLASSES = "all"
 
     # ====================
     # Dataloader CfgNode

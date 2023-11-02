@@ -13,11 +13,10 @@ class ImageNet(DatasetBase):
         self._dataset_dir = "imagenet"
         root = os.path.abspath(os.path.expanduser(cfg.DATASET.ROOT))
         self._dataset_dir = os.path.join(root, self.dataset_dir)
-        self._image_dir = os.path.join(self.dataset_dir, "images")
         self._preprocessed = os.path.join(self.dataset_dir, "preprocessed.pkl")
 
         if os.path.exists(self._preprocessed):
-            with open(self.preprocessed, "rb") as f:
+            with open(self._preprocessed, "rb") as f:
                 preprocessed = pickle.load(f)
                 train = preprocessed["train"]
                 test = preprocessed["test"]
@@ -28,7 +27,14 @@ class ImageNet(DatasetBase):
             # Follow standard practice to perform evaluation on the val set
             # Also used as the val set (so evaluate the last-step model)
             test = self.read_data(class_names, "val")
-            exit()
+
+            preprocessed = {"train": train, "test": test}
+            with open(self._preprocessed, "wb") as f:
+                pickle.dump(preprocessed, f, protocol=pickle.HIGHEST_PROTOCOL)
+
+        subsample = cfg.DATASET.SUBSAMPLE_CLASSES
+        train, test = OxfordPets.subsample_classes(train, test, subsample=subsample)
+        exit()
 
     @staticmethod
     def read_class_names(text_file):
@@ -51,7 +57,7 @@ class ImageNet(DatasetBase):
         return class_names
 
     def read_data(self, class_names, split_dir):
-        split_dir = os.path.join(self._image_dir, split_dir)
+        split_dir = os.path.join(self._dataset_dir, split_dir)
         folder_names = sorted(f.name for f in os.scandir(split_dir) if f.is_dir())
         img_datums = []
 
@@ -60,4 +66,12 @@ class ImageNet(DatasetBase):
             class_name = class_names[folder_name]
             for img_name in img_names:
                 img_path = os.path.join(split_dir, folder_name, img_name)
-                img_datum = Datum(img_path=img_path, class_label=class_label, domain_label=0, class_name=class_name)
+                img_datum = Datum(
+                    img_path=img_path,
+                    class_label=class_label,
+                    domain_label=0,
+                    class_name=class_name,
+                )
+                img_datums.append(img_datum)
+
+        return img_datums
