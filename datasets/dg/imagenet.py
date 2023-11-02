@@ -52,10 +52,12 @@ class ImageNet(DatasetBase):
 
     def read_data(self, class_names, split_dir):
         split_dir = os.path.join(self.image_dir, split_dir)
-        folders = sorted(f.name for f in os.scandir(split_dir) if f.is_dir())
+        folder_names = sorted(f.name for f in os.scandir(split_dir) if f.is_dir())
         items = []
 
-        for label, folder in enumerate(folders):
-            img_names = listdir_nonhidden(os.path.join(split_dir, folder))
-            print(img_names)
-            exit()
+        for label, folder_name in enumerate(folder_names):
+            img_names = listdir_nonhidden(os.path.join(split_dir, folder_name))
+            class_name = class_names[folder_name]
+            for img_name in img_names:
+                img_path = os.path.join(split_dir, folder_name, img_name)
+                item = Datum(img_path=img_path, label=label, class_name=class_name)
