@@ -2,7 +2,7 @@ import os
 import pickle
 from collections import OrderedDict
 
-from datasets.base_dataset import DatasetBase
+from datasets.base_dataset import DatasetBase, Datum
 from datasets.build_dataset import DATASET_REGISTRY
 from utils import listdir_nonhidden
 
