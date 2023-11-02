@@ -1,8 +1,10 @@
 import os
 import pickle
+from collections import OrderedDict
 
 from datasets.base_dataset import DatasetBase
 from datasets.build_dataset import DATASET_REGISTRY
+from utils import listdir_nonhidden
 
 
 @DATASET_REGISTRY.register()
@@ -21,12 +23,39 @@ class ImageNet(DatasetBase):
                 test = preprocessed["test"]
         else:
             text_file = os.path.join(self.dataset_dir, "classnames.txt")
-            print(text_file)
+            class_names = self.read_class_names(text_file)
+            train = self.read_data(class_names, "train")
+            # Follow standard practice to perform evaluation on the val set
+            # Also used as the val set (so evaluate the last-step model)
+            test = self.read_data(class_names, "val")
             exit()
-            classnames = self.read_classnames(text_file)
-            print(classnames)
-            exit()
-    
+
     @staticmethod
-    def read_classnames(text_file):
-        pass
+    def read_class_names(text_file):
+        """
+        Args:
+            text_file (str): Path of file that contains all folders' names and corresponding class names
+
+        Returns:
+            OrderedDict: Key-value pairs of <folder name>: <class name>
+        """
+        class_names = OrderedDict()
+        with open(text_file, "r") as f:
+            lines = f.readlines()
+            for line in lines:
+                line = line.strip().split(" ")
+                folder_name = line[0]
+                class_name = " ".join(line[1:])
+                class_names[folder_name] = class_name
+
+        return class_names
+
+    def read_data(self, class_names, split_dir):
+        split_dir = os.path.join(self.image_dir, split_dir)
+        folders = sorted(f.name for f in os.scandir(split_dir) if f.is_dir())
+        items = []
+
+        for label, folder in enumerate(folders):
+            img_names = listdir_nonhidden(os.path.join(split_dir, folder))
+            print(img_names)
+            exit()

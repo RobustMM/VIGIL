@@ -43,8 +43,8 @@ def get_most_similar_str_to_a_from_b(a, b):
     """Return the most similar string to a in b.
 
     Args:
-        a (str): probe string.
-        b (list): a list of candidate strings.
+        a (str): Probe string.
+        b (list): A list of candidate strings.
     """
     highest_sim = 0
     chosen = None
@@ -60,8 +60,8 @@ def check_availability(requested, available):
     """Check if an element is available in a list.
 
     Args:
-        requested (str): probe string.
-        available (list): a list of available strings.
+        requested (str): Probe string.
+        available (list): A list of available strings.
     """
     if requested not in available:
         psb_ans = get_most_similar_str_to_a_from_b(requested, available)
@@ -70,3 +70,19 @@ def check_availability(requested, available):
             "to belong to {}, but got [{}] "
             "(do you mean [{}]?)".format(available, requested, psb_ans)
         )
+
+
+def listdir_nonhidden(path, sort=False):
+    """List non-hidden items in a given directory.
+
+    Args:
+        path (str): Directory path.
+        sort (bool, optional): Whether to sort the items. Defaults to False.
+
+    Returns:
+        list: All non-hidden items in a given directory.
+    """
+    items = [f for f in os.listdir(path) if not f.startswith(".")]
+    if sort:
+        items.sort()
+    return items
