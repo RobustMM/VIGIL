@@ -1,5 +1,7 @@
-class Datum:
+import os.path as osp
 
+
+class Datum:
     def __init__(self, img_path, class_label, domain_label, class_name):
         """Data instance which defines the basic attributes.
 
@@ -9,6 +11,9 @@ class Datum:
             domain_label (int): Domain label
             class_name (str): Class name
         """
+        assert isinstance(img_path, str)
+        assert osp.isfile(img_path)
+
         self._img_path = img_path
         self._class_label = class_label
         self._domain_label = domain_label
@@ -48,6 +53,8 @@ class DatasetBase:
         self._val_data = val_data
         self._test_data = test_data
         self._num_classes = self.get_num_classes()
+        print("Hi")
+        exit()
 
     @property
     def dataset_dir(self):

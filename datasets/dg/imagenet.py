@@ -6,6 +6,8 @@ from datasets.base_dataset import DatasetBase, Datum
 from datasets.build_dataset import DATASET_REGISTRY
 from utils import listdir_nonhidden
 
+from .oxford_pets import OxfordPets
+
 
 @DATASET_REGISTRY.register()
 class ImageNet(DatasetBase):
@@ -18,23 +20,33 @@ class ImageNet(DatasetBase):
         if os.path.exists(self._preprocessed):
             with open(self._preprocessed, "rb") as f:
                 preprocessed = pickle.load(f)
-                train = preprocessed["train"]
-                test = preprocessed["test"]
+                train_data = preprocessed["train_data"]
+                test_data = preprocessed["test_data"]
         else:
             text_file = os.path.join(self._dataset_dir, "classnames.txt")
             class_names = self.read_class_names(text_file)
-            train = self.read_data(class_names, "train")
+            train_data = self.read_data(class_names, "train")
             # Follow standard practice to perform evaluation on the val set
             # Also used as the val set (so evaluate the last-step model)
-            test = self.read_data(class_names, "val")
+            test_data = self.read_data(class_names, "val")
 
-            preprocessed = {"train": train, "test": test}
+            preprocessed = {"train_data": train_data, "test_data": test_data}
             with open(self._preprocessed, "wb") as f:
                 pickle.dump(preprocessed, f, protocol=pickle.HIGHEST_PROTOCOL)
 
         subsample = cfg.DATASET.SUBSAMPLE_CLASSES
-        train, test = OxfordPets.subsample_classes(train, test, subsample=subsample)
-        exit()
+        # TODO: May need to refactor to base class
+        train_data, test_data = OxfordPets.subsample_classes(
+            train_data, test_data, subsample=subsample
+        )
+
+        super().__init__(
+            dataset_dir=self._dataset_dir,
+            domains=0,
+            train_data=train_data,
+            val_data=test_data,
+            test_data=test_data,
+        )
 
     @staticmethod
     def read_class_names(text_file):
