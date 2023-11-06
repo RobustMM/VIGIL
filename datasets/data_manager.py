@@ -53,6 +53,26 @@ class DataManager:
             is_train=True,
         )
 
+        val_loader = None
+        if dataset.val_data:
+            val_loader = build_data_loader(
+                cfg=cfg,
+                sampler_type=cfg.DATALOADER.TEST.SAMPLER,
+                data_source=dataset.val_data,
+                batch_size=cfg.DATALOADER.TEST.BATCH_SIZE,
+                transform=transform_test,
+                is_train=False,
+            )
+
+        test_loader = build_data_loader(
+            cfg=cfg,
+            sampler_type=cfg.DATALOADER.TEST.SAMPLER,
+            data_source=dataset.test_data,
+            batch_size=cfg.DATALOADER.TEST.BATCH_SIZE,
+            transform=transform_test,
+            is_train=False,
+        )
+
 
 class DatasetWrapper(TorchDataset):
     def __init__(self, cfg, data_source, transform=None, is_train=False):
