@@ -1,9 +1,11 @@
 from torchvision.transforms import (
+    CenterCrop,
     Compose,
     InterpolationMode,
     Normalize,
     RandomHorizontalFlip,
     RandomResizedCrop,
+    Resize,
     ToTensor,
 )
 
@@ -21,9 +23,9 @@ def build_transform(cfg, is_train=True):
 
 
 def _build_transform_train(cfg, transform_choices):
-    interp_mode = INTERPOLATION_MODES[cfg.INPUT.INTERPOLATION]
-
     transform_train = []
+
+    interp_mode = INTERPOLATION_MODES[cfg.INPUT.INTERPOLATION]
 
     if "random_resized_crop" in transform_choices:
         transform_train += [
@@ -51,4 +53,22 @@ def _build_transform_train(cfg, transform_choices):
 
 
 def _build_transform_test(cfg, transform_choices):
-    pass
+    transform_test = []
+
+    interp_mode = INTERPOLATION_MODES[cfg.INPUT.INTERPOLATION]
+
+    transform_test += [Resize(max(cfg.INPUT.SIZE), interpolation=interp_mode)]
+
+    transform_test += [CenterCrop(cfg.INPUT.SIZE)]
+
+    transform_test += [ToTensor()]
+
+    if "normalize" in transform_choices:
+        transform_test += [
+            Normalize(mean=cfg.INPUT.PIXEL_MEAN, std=cfg.INPUT.PIXEL_STD)
+        ]
+
+    transform_test = Compose(transform_test)
+    print("Transform for Test: {}".format(transform_test))
+
+    return transform_test
