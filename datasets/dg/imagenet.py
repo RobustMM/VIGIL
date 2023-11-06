@@ -28,7 +28,8 @@ class ImageNet(DatasetBase):
             train_data = self.read_data(class_names, "train")
             # Follow standard practice to perform evaluation on the val set
             # Also used as the val set (so evaluate the last-step model)
-            test_data = self.read_data(class_names, "val")
+            # TODO: Fix From Train to Val - Implement Val Reader Later
+            test_data = self.read_data(class_names, "train")
 
             preprocessed = {"train_data": train_data, "test_data": test_data}
             with open(self._preprocessed, "wb") as f:

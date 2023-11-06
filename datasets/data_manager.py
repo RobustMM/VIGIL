@@ -1,7 +1,9 @@
-from .build_dataset import build_dataset
-from .transforms import build_transform
-
+import torch
 from torch.utils.data import Dataset as TorchDataset
+
+from .build_dataset import build_dataset
+from .samplers import build_sampler
+from .transforms import build_transform
 
 
 def build_data_loader(
@@ -11,9 +13,28 @@ def build_data_loader(
     batch_size=64,
     transform=None,
     is_train=True,
-    dataset_wrapper=None,
 ):
-    pass
+    sampler = build_sampler(sampler_type=sampler_type, data_source=data_source)
+
+    data_loader = torch.utils.data.DataLoader(
+        dataset=DatasetWrapper(cfg, data_source, transform, is_train),
+        batch_size=batch_size,
+        sampler=sampler,
+        num_workers=cfg.DATALOADER.NUM_WORKERS,
+        drop_last=is_train,
+        pin_memory=torch.cuda.is_available(),
+    )
+
+    print(len(data_loader.dataset))
+    print(data_loader.batch_size)
+    print(data_loader.sampler)
+    print(data_loader.num_workers)
+    print(data_loader.drop_last)
+    print(data_loader.pin_memory)
+
+    assert len(data_loader) > 0
+
+    return data_loader
 
 
 class DataManager:
@@ -23,8 +44,6 @@ class DataManager:
         transform_train = build_transform(cfg, is_train=True)
         transform_test = build_transform(cfg, is_train=False)
 
-        # TODO: Build Data Loader - Train
-        print(cfg.DATALOADER)
         data_loader_train = build_data_loader(
             cfg=cfg,
             sampler_type=cfg.DATALOADER.TRAIN.SAMPLER,
