@@ -40,3 +40,7 @@ class DatasetWrapper(TorchDataset):
         self.cfg = cfg
         self.data_source = data_source
         self.transform = transform
+        self.in_train = is_train
+
+    def __len__(self):
+        return len(self.data_source)
