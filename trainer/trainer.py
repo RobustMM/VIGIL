@@ -101,8 +101,11 @@ class Trainer:
         for _, batch_data in enumerate(tqdm(data_loader)):
             input_data, class_label = self.parse_batch_test(batch_data)
             output = self.model_inference(input_data)
-            print(output)
-            exit()
+            self.evaluator.process(output, class_label)
+
+        evaluation_results = self.evaluator.evaluate()
+
+        return list(evaluation_results.values())[0]
 
     def parse_barch_train(self, batch_data):
         raise NotImplementedError
