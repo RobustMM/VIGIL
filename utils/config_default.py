@@ -106,7 +106,7 @@ def get_cfg_default():
     # ====================
     _C.TEST = CN()
     _C.TEST.EVALUATOR = "Classification"
-    _C.TEST.SPLIT = "test"
+    _C.TEST.SPLIT = "Test"
     _C.TEST.FINAL_Model = "last_step"
 
     return _C

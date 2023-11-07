@@ -83,8 +83,20 @@ class Trainer:
     def after_epoch(self):
         pass
 
-    def test(self):
-        raise NotImplementedError
+    @torch.no_grad()
+    def test(self, split=None):
+        if split is None:
+            split = self.cfg.TEST.SPLIT
+
+        if split == "Validation" and self.val_loader is not None:
+            data_loader = self.data_loader_val
+        elif split == "Test":
+            data_loader = self.data_loader_test
+        else:
+            raise NotImplementedError
+
+        print("Evaluate on the {} Set".format(split))
+        
 
     def parse_barch_train(self, batch_data):
         raise NotImplementedError

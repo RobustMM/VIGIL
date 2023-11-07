@@ -75,7 +75,10 @@ def main(args):
     # print("** System info **\n{}\n".format(collect_env_info()))
 
     trainer = build_trainer(cfg)
-    trainer.train()
+    if args.model == "CLIPZeroshot":
+        trainer.test()
+    else:
+        trainer.train()
 
 
 if __name__ == "__main__":
