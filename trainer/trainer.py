@@ -17,10 +17,14 @@ class Trainer:
 
         self._writer = None
 
-        # TODO: Build Data Manager
+        # Build Data Manager
         self.data_manager = DataManager(self.cfg)
-        print("Hi - Ho")
-        
+        self.data_loader_train = self.data_manager.data_loader_train
+        self.data_loader_val = self.data_manager.data_loader_val
+        self.data_loader_test = self.data_manager.data_loader_test
+        self.num_classes = self.data_manager.num_classes
+        self.class_label_name_mapping = self.data_manager.class_label_name_mapping
+
         # TODO: Build Model
         self.build_model()
 
