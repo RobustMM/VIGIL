@@ -18,16 +18,13 @@ class Trainer:
         self._writer = None
 
         # TODO: Build Data Manager
-        self.build_data_loader()
-
-        exit()
+        self.data_manager = DataManager(self.cfg)
+        print("Hi - Ho")
+        
         # TODO: Build Model
         self.build_model()
 
         # TODO: Build Evaluator
-
-    def build_data_loader(self):
-        self.data_manager = DataManager(self.cfg)
 
     def build_model(self):
         raise NotImplementedError
