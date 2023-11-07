@@ -1,4 +1,5 @@
 # import clip
+import torch
 from clip import clip
 
 from trainer import MODEL_REGISTERY, Trainer
@@ -11,12 +12,25 @@ class CLIPZeroshot(Trainer):
     def build_model(self):
         class_names = self.data_manager.dataset.class_names
 
-        clip_model, preprocess = clip.load(
+        self.clip_model, preprocess = clip.load(
             self.cfg.MODEL.BACKBONE,
             device=self.device,
             download_root="/data/dzha866/Project/VIGIL/data/",
         )
         prompt_template = PROMPT_TEMPLATES[self.cfg.DATASET.NAME]
-        print(prompt_template)
+        prompts = [
+            prompt_template.format(class_name.replace("_", " "))
+            for class_name in class_names
+        ]
+        # print(f"Prompts: {prompts}")
+        prompts = torch.cat([clip.tokenize(prompt) for prompt in prompts])
+        prompts = prompts.to(self.device)
 
-        exit()
+        with torch.no_grad():
+            self.text_features = self.clip_model.encode_text(prompts)
+            self.text_features = self.text_features / self.text_features.norm(
+                dim=-1, keepdim=True
+            )
+
+    def model_inference(self, input_data):
+        pass
