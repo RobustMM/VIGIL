@@ -1,5 +1,6 @@
 import torch
 from torch.utils.data import Dataset as TorchDataset
+from PIL import Image
 
 from .build_dataset import build_dataset
 from .samplers import build_sampler
@@ -83,3 +84,18 @@ class DatasetWrapper(TorchDataset):
 
     def __len__(self):
         return len(self.data_source)
+
+    def __getitem__(self, idx):
+        datum = self.data_source[idx]
+
+        output = {
+            "img_path": datum.img_path,
+            "domain_label": datum.domain_label,
+            "class_label": datum.class_label,
+            "index": idx,
+        }
+
+        img = Image.open(datum.img_path).convert("RGB")
+        output["img"] = self.transform(img)
+
+        return output
