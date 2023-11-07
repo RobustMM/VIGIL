@@ -25,10 +25,13 @@ class Trainer:
         self.num_classes = self.data_manager.num_classes
         self.class_label_name_mapping = self.data_manager.class_label_name_mapping
 
-        # TODO: Build Model
+        # Build Model
         self.build_model()
 
         # TODO: Build Evaluator
+        self.evaluator = build_evaluator(
+            cfg, class_label_name_mapping=self.class_label_name_mapping
+        )
 
     def build_model(self):
         raise NotImplementedError
