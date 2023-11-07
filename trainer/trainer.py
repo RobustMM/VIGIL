@@ -102,7 +102,6 @@ class Trainer:
             input_data, class_label = self.parse_batch_test(batch_data)
             output = self.model_inference(input_data)
             print(output)
-            print(len(output))
             exit()
 
     def parse_barch_train(self, batch_data):

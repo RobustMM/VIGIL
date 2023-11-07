@@ -72,7 +72,7 @@ def check_availability(requested, available):
         )
 
 
-def listdir_nonhidden(path, sort=False):
+def listdir_nonhidden(path, sort=True):
     """List non-hidden items in a given directory.
 
     Args:
