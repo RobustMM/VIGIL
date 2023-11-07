@@ -29,7 +29,7 @@ class Trainer:
         # Build Model
         self.build_model()
 
-        # TODO: Build Evaluator
+        # Build Evaluator
         self.evaluator = build_evaluator(
             cfg, class_label_name_mapping=self.class_label_name_mapping
         )
