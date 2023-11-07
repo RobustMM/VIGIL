@@ -4,6 +4,7 @@ import torch
 from torch.utils.tensorboard import SummaryWriter
 
 from datasets import DataManager
+from evaluator import build_evaluator
 
 
 class Trainer:
