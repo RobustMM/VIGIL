@@ -1,4 +1,3 @@
-# import clip
 import torch
 from clip import clip
 
