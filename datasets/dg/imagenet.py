@@ -28,8 +28,7 @@ class ImageNet(DatasetBase):
             train_data = self.read_data(class_names, "train")
             # Follow standard practice to perform evaluation on the val set
             # Also used as the val set (so evaluate the last-step model)
-            # TODO: Fix From Train to Val - Implement Val Reader Later
-            test_data = self.read_data(class_names, "train")
+            test_data = self.read_data(class_names, "val")
 
             preprocessed = {"train_data": train_data, "test_data": test_data}
             with open(self._preprocessed, "wb") as f:
@@ -70,6 +69,12 @@ class ImageNet(DatasetBase):
         return class_names
 
     def read_data(self, class_names, split_dir):
+        if split_dir == "train":
+            self._read_data_train(class_names, split_dir)
+        elif split_dir == "val" or split_dir == "test":
+            self._read_data_test(class_names, split_dir)
+
+    def _read_data_train(self, class_names, split_dir):
         split_dir = os.path.join(self._dataset_dir, split_dir)
         folder_names = sorted(f.name for f in os.scandir(split_dir) if f.is_dir())
         img_datums = []
@@ -88,3 +93,7 @@ class ImageNet(DatasetBase):
                 img_datums.append(img_datum)
 
         return img_datums
+
+    def _read_data_test(self, class_names, split_dir):
+        print("Read Test Data")
+        exit()
