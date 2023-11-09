@@ -3,7 +3,13 @@ from clip import clip
 
 from trainer import MODEL_REGISTERY, Trainer
 
-PROMPT_TEMPLATES = {"ImageNet": "a photo of a {}.", "ImageNetV2": "a photo of a {}."}
+PROMPT_TEMPLATES = {
+    "ImageNet": "a photo of a {}.",
+    "ImageNetV2": "a photo of a {}.",
+    "ImageNetR": "a photo of a {}.",
+    "ImageNetSketch": "a photo of a {}.",
+    "ImageNetA": "a photo of a {}.",
+}
 
 
 @MODEL_REGISTERY.register()
