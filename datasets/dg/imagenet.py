@@ -25,7 +25,7 @@ class ImageNet(DatasetBase):
                 test_data = preprocessed["test_data"]
         else:
             text_file = os.path.join(self._dataset_dir, "classnames.txt")
-            class_names_labels = self.read_class_names(text_file)
+            class_names_labels = self.read_class_names_labels(text_file)
             train_data = self.read_data(class_names_labels, "train")
             # Follow standard practice to perform evaluation on the val set
             # Also used as the val set (so evaluate the last-step model)
@@ -50,7 +50,7 @@ class ImageNet(DatasetBase):
         )
 
     @staticmethod
-    def read_class_names(text_file):
+    def read_class_names_labels(text_file):
         """
         Args:
             text_file (str): Path of file that contains all folders' names and corresponding class names
@@ -71,20 +71,20 @@ class ImageNet(DatasetBase):
 
         return class_names_labels
 
-    def read_data(self, class_names, split_dir):
+    def read_data(self, class_names_labels, split_dir):
         if split_dir == "train":
-            self._read_data_train(class_names, split_dir)
+            return self._read_data_train(class_names_labels, split_dir)
         elif split_dir == "val" or split_dir == "test":
-            self._read_data_test(class_names, split_dir)
+            return self._read_data_test(class_names_labels, split_dir)
 
-    def _read_data_train(self, class_names, split_dir):
+    def _read_data_train(self, class_names_labels, split_dir):
         split_dir = os.path.join(self._dataset_dir, split_dir)
         folder_names = sorted(f.name for f in os.scandir(split_dir) if f.is_dir())
         img_datums = []
 
         for folder_name in folder_names:
             img_names = listdir_nonhidden(os.path.join(split_dir, folder_name))
-            class_name, class_label = class_names[folder_name]
+            class_name, class_label = class_names_labels[folder_name]
 
             for img_name in img_names:
                 img_path = os.path.join(split_dir, folder_name, img_name)
@@ -98,25 +98,25 @@ class ImageNet(DatasetBase):
 
         return img_datums
 
-    def _read_data_test(self, class_names, split_dir):
+    def _read_data_test(self, class_names_labels, split_dir):
         split_dir = os.path.join(self._dataset_dir, split_dir)
         img_names = listdir_nonhidden(split_dir)
+        img_datums = []
 
         for img_name in img_names:
             img_path = os.path.join(split_dir, img_name)
-            print("img_path: {}".format(img_path))
-            print()
-
             annotation_path = (
                 split_dir + "_annotations/" + img_name.split(".")[0] + ".xml"
             )
-            print(annotation_path)
             tree = ET.parse(annotation_path)
             root = tree.getroot()
-            print(root.find(".//name").text)
-            class_name, class_label = class_names[root.find(".//name").text]
-            print(class_name)
-            print(class_label)
-            exit()
+            class_name, class_label = class_names_labels[root.find(".//name").text]
+            img_datum = Datum(
+                img_path=img_path,
+                class_label=class_label,
+                domain_label=0,
+                class_name=class_name,
+            )
+            img_datums.append(img_datum)
 
-        exit()
+        return img_datums
