@@ -7,8 +7,6 @@ from datasets.base_dataset import DatasetBase, Datum
 from datasets.build_dataset import DATASET_REGISTRY
 from utils import listdir_nonhidden
 
-from .oxford_pets import OxfordPets
-
 
 @DATASET_REGISTRY.register()
 class ImageNet(DatasetBase):
@@ -34,12 +32,6 @@ class ImageNet(DatasetBase):
             preprocessed = {"train_data": train_data, "test_data": test_data}
             with open(self._preprocessed, "wb") as f:
                 pickle.dump(preprocessed, f, protocol=pickle.HIGHEST_PROTOCOL)
-
-        subsample = cfg.DATASET.SUBSAMPLE_CLASSES
-        # TODO: May need to refactor to base class
-        train_data, test_data = OxfordPets.subsample_classes(
-            train_data, test_data, subsample=subsample
-        )
 
         super().__init__(
             dataset_dir=self._dataset_dir,
