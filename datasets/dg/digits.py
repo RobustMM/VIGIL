@@ -38,7 +38,14 @@ class Digits(DatasetBase):
 
         self.check_input_domains(cfg.DATASET.SOURCE_DOMAINS, cfg.DATASET.TARGET_DOMAINS)
 
-        exit()
         train_data = self.read_data(cfg.DATASET.SOURCE_DOMAINS, "train")
         val_data = self.read_data(cfg.DATASET.SOURCE_DOMAINS, "val")
         test_data = self.read_data(cfg.DATASET.TARGET_DOMAINS, "test")
+
+        exit()
+
+    def read_data(self, input_domains, split):
+        print(input_domains)
+        print(split)
+
+        return 0
