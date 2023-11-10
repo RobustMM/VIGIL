@@ -35,13 +35,13 @@ class ImageNetV2(DatasetBase):
         img_dir = os.path.join(
             self._dataset_dir, "imagenetv2-matched-frequency-format-val"
         )
-        folders = list(class_names_labels.keys())
+        folder_names = list(class_names_labels.keys())
         img_datums = []
 
         for class_label in range(1000):
             img_names = listdir_nonhidden(os.path.join(img_dir, str(class_label)))
-            folder = folders[class_label]
-            class_name, _ = class_names_labels[folder]
+            folder_name = folder_names[class_label]
+            class_name, _ = class_names_labels[folder_name]
 
             for img_name in img_names:
                 img_path = os.path.join(img_dir, str(class_label), img_name)
