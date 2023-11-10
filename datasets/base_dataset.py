@@ -1,5 +1,8 @@
 import os
 
+import gdown
+import zipfile
+
 
 class Datum:
     def __init__(self, img_path, class_label, domain_label, class_name):
@@ -115,3 +118,25 @@ class DatasetBase:
         ]
 
         return class_label_name_mapping, class_names
+
+    def check_input_domains(self, source_domains, target_domain):
+        self.is_input_domain_valid(source_domains)
+        self.is_input_domain_valid(target_domain)
+
+    def is_input_domain_valid(self, input_domains):
+        for domain in input_domains:
+            if domain not in self._domains:
+                raise ValueError(
+                    "Input Domain Must Belong to {}, " "but Got [{}]".format(
+                        self._domains, domain
+                    )
+                )
+
+    def download_data_from_gdrive(self, dst):
+        gdown.download(self._data_url, dst, quiet=False)
+
+        zip_ref = zipfile.ZipFile(dst, "r")
+        zip_ref.extractall(os.path.dirname(dst))
+        zip_ref.close()
+        print("File Extracted to {}".format(os.path.dirname(dst)))
+        os.remove(dst)

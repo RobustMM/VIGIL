@@ -36,6 +36,8 @@ class Digits(DatasetBase):
         if not os.path.exists(self._dataset_dir):
             self.download_data_from_gdrive(os.path.join(root, "digits.zip"))
 
+        self.check_input_domains(cfg.DATASET.SOURCE_DOMAINS, cfg.DATASET.TARGET_DOMAINS)
+
         exit()
         train_data = self.read_data(cfg.DATASET.SOURCE_DOMAINS, "train")
         val_data = self.read_data(cfg.DATASET.SOURCE_DOMAINS, "val")
