@@ -30,4 +30,13 @@ class Digits(DatasetBase):
             "https://drive.google.com/uc?id=1GK4B94SGABgOH0pguTxFQLO9tQVamsnz"
         )
         root = os.path.abspath(os.path.expanduser(cfg.DATASET.ROOT))
-        self._data_url = os.path.join(root, self.dataset_dir)
+        self._dataset_dir = os.path.join(root, self.dataset_dir)
+        self._domain_info = {}
+
+        if not os.path.exists(self._dataset_dir):
+            self.download_data_from_gdrive(os.path.join(root, "digits.zip"))
+
+        exit()
+        train_data = self.read_data(cfg.DATASET.SOURCE_DOMAINS, "train")
+        val_data = self.read_data(cfg.DATASET.SOURCE_DOMAINS, "val")
+        test_data = self.read_data(cfg.DATASET.TARGET_DOMAINS, "test")
