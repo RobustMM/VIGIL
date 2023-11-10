@@ -1,4 +1,4 @@
-import os.path as osp
+import os
 
 
 class Datum:
@@ -12,7 +12,7 @@ class Datum:
             class_name (str): Class name
         """
         assert isinstance(img_path, str)
-        assert osp.isfile(img_path)
+        assert os.path.isfile(img_path)
 
         self._img_path = img_path
         self._class_label = class_label

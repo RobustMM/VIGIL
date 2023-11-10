@@ -1,5 +1,4 @@
 import os
-import os.path as osp
 import sys
 import time
 
@@ -16,7 +15,6 @@ class Logger:
 
     Examples::
        >>> import sys
-       >>> import os.path as osp
        >>> save_dir = 'output/experiment-1'
        >>> log_name = 'train.log'
        >>> sys.stdout = Logger(osp.join(save_dir, log_name))
@@ -26,7 +24,7 @@ class Logger:
         self.console = sys.stdout
         self.file = None
         if fpath is not None:
-            mkdir_if_missing(osp.dirname(fpath))
+            mkdir_if_missing(os.path.dirname(fpath))
             self.file = open(fpath, "w")
 
     def write(self, msg):
@@ -47,6 +45,6 @@ class Logger:
 
 
 def setup_logger(outputs_path):
-    fpath = osp.join(outputs_path, (time.strftime("%Y-%m-%d-%H-%M-%S") + ".log"))
+    fpath = os.path.join(outputs_path, (time.strftime("%Y-%m-%d-%H-%M-%S") + ".log"))
 
     sys.stdout = Logger(fpath)

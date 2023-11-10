@@ -1,6 +1,5 @@
 import errno
 import os
-import os.path as osp
 import random
 from difflib import SequenceMatcher
 
@@ -20,7 +19,7 @@ def set_random_seed(seed):
 
 
 def mkdir_if_missing(dir):
-    if not osp.exists(dir):
+    if not os.path.exists(dir):
         try:
             os.makedirs(dir)
         except OSError as e:
