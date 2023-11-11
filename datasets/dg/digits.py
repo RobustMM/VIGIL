@@ -1,6 +1,5 @@
 import glob
 import os
-import sys
 
 from datasets.base_dataset import DatasetBase, Datum
 from datasets.build_dataset import DATASET_REGISTRY
@@ -40,12 +39,52 @@ class Digits(DatasetBase):
 
         train_data = self.read_data(cfg.DATASET.SOURCE_DOMAINS, "train")
         val_data = self.read_data(cfg.DATASET.SOURCE_DOMAINS, "val")
-        test_data = self.read_data(cfg.DATASET.TARGET_DOMAINS, "test")
+        test_data = self.read_data(cfg.DATASET.TARGET_DOMAINS, "all")
 
-        exit()
+        super().__init__(
+            dataset_dir=self._dataset_dir,
+            domains=self._domains,
+            data_url=self._data_url,
+            train_data=train_data,
+            val_data=val_data,
+            test_data=test_data,
+        )
 
     def read_data(self, input_domains, split):
-        print(input_domains)
-        print(split)
+        def _load_data_from_directory(directory):
+            folder_names = listdir_nonhidden(directory)
+            images_ = []
 
-        return 0
+            for class_label, folder_name in enumerate(folder_names):
+                img_paths = glob.glob(os.path.join(directory, folder_name, "*.jpg"))
+
+                for img_path in img_paths:
+                    images_.append((img_path, class_label))
+
+            return images_
+
+        img_datums = []
+
+        for domain_label, domain_name in enumerate(input_domains):
+            if split == "all":
+                train_dir = os.path.join(self._dataset_dir, domain_name, "train")
+                img_path_class_label_list = _load_data_from_directory(train_dir)
+                val_dir = os.path.join(self._dataset_dir, domain_name, "val")
+                img_path_class_label_list += _load_data_from_directory(val_dir)
+            else:
+                split_dir = os.path.join(self._dataset_dir, domain_name, split)
+                img_path_class_label_list = _load_data_from_directory(split_dir)
+            self._domain_info[domain_name] = len(img_path_class_label_list)
+
+            for img_path, class_label in img_path_class_label_list:
+                class_name = img_path.split("/")[-2].lower()
+
+                img_datum = Datum(
+                    img_path=img_path,
+                    class_label=class_label,
+                    domain_label=domain_label,
+                    class_name=class_name,
+                )
+                img_datums.append(img_datum)
+
+        return img_datums
