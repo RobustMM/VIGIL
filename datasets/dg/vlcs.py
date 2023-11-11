@@ -21,7 +21,7 @@ class VLCS(DatasetBase):
         self._dataset_dir = "vlcs"
         self._domains = ["caltech", "labelme", "pascal", "sun"]
         self._data_url = (
-            "https://drive.google.com/uc?id=1vN7bWbEpKD-m0Q5M0QEmZDgHv3L1EYC5"
+            "https://drive.google.com/uc?id=1o8RlEMyT5D3Pmcw0YbyGQA7uDzPY4xbi"
         )
         root = os.path.abspath(os.path.expanduser(cfg.DATASET.ROOT))
         self._dataset_dir = os.path.join(root, self.dataset_dir)
