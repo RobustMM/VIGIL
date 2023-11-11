@@ -11,6 +11,7 @@ PROMPT_TEMPLATES = {
     "ImageNetA": "a photo of a {}.",
     "Digits": "a picture of a {}.",
     "PACS": "a picture of a {}.",
+    "OfficeHome": "a picture of a {}."
 }
 
 

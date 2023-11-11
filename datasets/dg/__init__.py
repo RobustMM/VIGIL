@@ -6,3 +6,4 @@ from .imagenetv2 import ImageNetV2  # noqa
 
 from .digits import Digits  # noqa
 from .pacs import PACS  # noqa
+from .office_home import OfficeHome  # noqa
