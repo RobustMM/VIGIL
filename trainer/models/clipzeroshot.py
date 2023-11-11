@@ -10,6 +10,7 @@ PROMPT_TEMPLATES = {
     "ImageNetSketch": "a photo of a {}.",
     "ImageNetA": "a photo of a {}.",
     "Digits": "a picture of a {}.",
+    "PACS": "a picture of a {}.",
 }
 
 

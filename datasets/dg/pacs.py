@@ -27,14 +27,13 @@ class PACS(DatasetBase):
         self._split_dir = os.path.join(self._dataset_dir, "splits")
         # The following images contain errors and should be ignored
         self._error_img_paths = ["sketch/dog/n02103406_4068-1.png"]
-        self.domain_info = {}
 
         if not os.path.exists(self._dataset_dir):
             self.download_data_from_gdrive(os.path.join(root, "pacs.zip"))
 
         self.check_input_domains(cfg.DATASET.SOURCE_DOMAINS, cfg.DATASET.TARGET_DOMAINS)
 
-        train_data = self._read_data(cfg.DATASET.SOURCE_DOMAINS, "all")
+        train_data = self._read_data(cfg.DATASET.SOURCE_DOMAINS, "train")
         val_data = self._read_data(cfg.DATASET.SOURCE_DOMAINS, "crossval")
         test_data = self._read_data(cfg.DATASET.TARGET_DOMAINS, "all")
 
@@ -48,6 +47,20 @@ class PACS(DatasetBase):
         )
 
     def _read_data(self, input_domains, split):
+        def _load_data_from_directory(directory):
+            images_ = []
+            with open(directory, "r") as file:
+                lines = file.readlines()
+                for line in lines:
+                    img_path, class_label = line.split(" ")
+                    if img_path in self._error_img_paths:
+                        continue
+                    img_path = os.path.join(self._image_dir, img_path)
+                    class_label = int(class_label) - 1
+                    images_.append((img_path, class_label))
+
+            return images_
+
         img_datums = []
 
         for domain_label, domain_name in enumerate(input_domains):
@@ -57,7 +70,24 @@ class PACS(DatasetBase):
                 )
                 img_path_class_label_list = _load_data_from_directory(train_dir)
                 val_dir = os.path.join(
-                    self._split_dir, domain_name + "_crossval_kfolx.txt"
+                    self._split_dir, domain_name + "_crossval_kfold.txt"
                 )
                 img_path_class_label_list += _load_data_from_directory(val_dir)
-        exit()
+            else:
+                split_dir = os.path.join(
+                    self._split_dir, domain_name + "_" + split + "_kfold.txt"
+                )
+                img_path_class_label_list = _load_data_from_directory(split_dir)
+
+            for img_path, class_label in img_path_class_label_list:
+                class_name = img_path.split("/")[-2].lower()
+
+                img_datum = Datum(
+                    img_path=img_path,
+                    class_label=class_label,
+                    domain_label=domain_label,
+                    class_name=class_name,
+                )
+                img_datums.append(img_datum)
+
+        return img_datums
