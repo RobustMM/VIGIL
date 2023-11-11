@@ -55,9 +55,9 @@ class PACS(DatasetBase):
                 train_dir = os.path.join(
                     self._split_dir, domain_name + "_train_kfold.txt"
                 )
+                img_path_class_label_list = _load_data_from_directory(train_dir)
                 val_dir = os.path.join(
                     self._split_dir, domain_name + "_crossval_kfolx.txt"
                 )
-                print(train_dir)
-
+                img_path_class_label_list += _load_data_from_directory(val_dir)
         exit()

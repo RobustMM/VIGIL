@@ -30,7 +30,6 @@ class Digits(DatasetBase):
         )
         root = os.path.abspath(os.path.expanduser(cfg.DATASET.ROOT))
         self._dataset_dir = os.path.join(root, self.dataset_dir)
-        self._domain_info = {}
 
         if not os.path.exists(self._dataset_dir):
             self.download_data_from_gdrive(os.path.join(root, "digits.zip"))
@@ -74,7 +73,6 @@ class Digits(DatasetBase):
             else:
                 split_dir = os.path.join(self._dataset_dir, domain_name, split)
                 img_path_class_label_list = _load_data_from_directory(split_dir)
-            self._domain_info[domain_name] = len(img_path_class_label_list)
 
             for img_path, class_label in img_path_class_label_list:
                 class_name = img_path.split("/")[-2].lower()

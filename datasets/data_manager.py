@@ -88,7 +88,6 @@ class DataManager:
 
     def show_dataset_summary(self, cfg):
         table = [["Dataset", cfg.DATASET.NAME]]
-
         if cfg.DATASET.SOURCE_DOMAINS:
             table.append(["Source Domains", cfg.DATASET.SOURCE_DOMAINS])
         if cfg.DATASET.TARGET_DOMAINS:
