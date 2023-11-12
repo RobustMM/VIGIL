@@ -16,8 +16,7 @@ class OfficeHome(DatasetBase):
         - URL: http://hemanthdv.org/OfficeHome-Dataset/.
 
     Reference:
-        - Venkateswara et al. Deep Hashing Network for Unsupervised
-        Domain Adaptation. CVPR 2017.
+        - Venkateswara et al. Deep Hashing Network for Unsupervised Domain Adaptation. CVPR 2017.
     """
 
     def __init__(self, cfg):
