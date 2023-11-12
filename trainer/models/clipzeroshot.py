@@ -13,6 +13,7 @@ PROMPT_TEMPLATES = {
     "PACS": "a picture of a {}.",
     "OfficeHome": "a picture of a {}.",
     "VLCS": "a picture of a {}.",
+    "NICO": "a picture of a {}.",
 }
 
 

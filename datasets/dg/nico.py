@@ -26,14 +26,12 @@ class NICO(DatasetBase):
         self.check_input_domains(cfg.DATASET.SOURCE_DOMAINS, cfg.DATASET.TARGET_DOMAINS)
 
         train_data = self._read_data(cfg.DATASET.SOURCE_DOMAINS, "train")
-        exit()
         val_data = self._read_data(cfg.DATASET.SOURCE_DOMAINS, "test")
         test_data = self._read_data(cfg.DATASET.TARGET_DOMAINS, "all")
 
         super().__init__(
             dataset_dir=self._dataset_dir,
             domains=self._domains,
-            data_url=self._data_url,
             train_data=train_data,
             val_data=val_data,
             test_data=test_data,
@@ -46,19 +44,37 @@ class NICO(DatasetBase):
             with open(directory, "r") as file:
                 lines = file.readlines()
                 for line in lines:
-                    print(line)
-                exit()
+                    line = line.strip()
+                    img_path = line.split(".")[0] + ".jpg"
+                    img_path = os.path.join(self._dataset_dir, img_path)
+                    class_label = int(line.split(" ")[-1])
+                    images_.append((img_path, class_label))
+
+                return images_
 
         img_datums = []
 
         for domain_label, domain_name in enumerate(input_domains):
             if split == "all":
-                pass
+                train_dir = os.path.join(self._dataset_dir, domain_name + "_train.txt")
+                img_path_class_label_list = _load_data_from_directory(train_dir)
+                test_dir = os.path.join(self._dataset_dir, domain_name + "_test.txt")
+                img_path_class_label_list += _load_data_from_directory(test_dir)
             else:
                 split_dir = os.path.join(
                     self._dataset_dir, domain_name + "_" + split + ".txt"
                 )
                 img_path_class_label_list = _load_data_from_directory(split_dir)
-                print(len(img_path_class_label_list))
 
-        exit()
+            for img_path, class_label in img_path_class_label_list:
+                class_name = str(img_path.split("/")[-2].lower())
+
+                img_datum = Datum(
+                    img_path=img_path,
+                    class_label=class_label,
+                    domain_label=domain_label,
+                    class_name=class_name,
+                )
+                img_datums.append(img_datum)
+
+        return img_datums
