@@ -14,6 +14,7 @@ PROMPT_TEMPLATES = {
     "OfficeHome": "a picture of a {}.",
     "VLCS": "a picture of a {}.",
     "NICO": "a picture of a {}.",
+    "DomainNet": "a picture of a {}.",
 }
 
 
