@@ -9,7 +9,7 @@ class NICO(DatasetBase):
     """
     NICO++ Statistics:
         - 88,866 images.
-        - 6 domains: autumn, dim, grass, outdoor, rock, water
+        - 6 domains: autumn, dim, grass, outdoor, rock, water.
         - 60 categories.
         - url: https://nicochallenge.com/dataset
 

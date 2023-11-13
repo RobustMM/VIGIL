@@ -8,8 +8,7 @@ from datasets.build_dataset import DATASET_REGISTRY
 class DomainNet(DatasetBase):
     """
     DomainNet Statistics:
-        - 6 distinct domains: Clipart, Infograph, Painting, Quickdraw,
-        Real, Sketch.
+        - 6 distinct domains: Clipart, Infograph, Painting, Quickdraw, Real, Sketch.
         - Around 0.6M images.
         - 345 categories.
         - URL: http://ai.bu.edu/M3SDA/.
