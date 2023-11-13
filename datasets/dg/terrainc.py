@@ -28,9 +28,9 @@ class TerraInc(DatasetBase):
 
         self.check_input_domains(cfg.DATASET.SOURCE_DOMAINS, cfg.DATASET.TARGET_DOMAINS)
 
-        train_data = self._read_data(cfg.DATASET.SOURCE_DOMAINS)
-        val_data = self._read_data(cfg.DATASET.TARGET_DOMAINS)
-        test_data = self._read_data(cfg.DATASET.TARGET_DOMAINS)
+        train_data = self.read_data(cfg.DATASET.SOURCE_DOMAINS)
+        val_data = self.read_data(cfg.DATASET.TARGET_DOMAINS)
+        test_data = self.read_data(cfg.DATASET.TARGET_DOMAINS)
 
         super().__init__(
             dataset_dir=self._dataset_dir,
@@ -40,7 +40,7 @@ class TerraInc(DatasetBase):
             test_data=test_data,
         )
 
-    def _read_data(self, input_domains):
+    def read_data(self, input_domains):
         def _load_data_from_directory(directory):
             folder_names = listdir_nonhidden(directory)
             images_ = []
