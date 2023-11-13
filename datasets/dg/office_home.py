@@ -52,7 +52,7 @@ class OfficeHome(DatasetBase):
             images_ = []
 
             for class_label, folder_name in enumerate(folder_names):
-                img_paths = glob.glob(os.path.join(directory, folder_name, "*.jpg"))
+                img_paths = glob.glob(os.path.join(directory, folder_name, "*"))
 
                 for img_path in img_paths:
                     images_.append((img_path, class_label))

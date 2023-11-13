@@ -1,3 +1,4 @@
+import glob
 import os
 
 from datasets.base_dataset import DatasetBase, Datum
@@ -33,16 +34,16 @@ class ImageNetA(DatasetBase):
         )
 
     def read_data(self, class_names_labels):
-        image_dir = os.path.join(self._dataset_dir, "imagenet-a")
-        folder_names = listdir_nonhidden(image_dir)
+        img_dir = os.path.join(self._dataset_dir, "imagenet-a")
+        folder_names = listdir_nonhidden(img_dir)
         img_datums = []
 
         for class_label, folder_name in enumerate(folder_names):
-            img_names = listdir_nonhidden(os.path.join(image_dir, folder_name))
             class_name, _ = class_names_labels[folder_name]
 
-            for img_name in img_names:
-                img_path = os.path.join(image_dir, folder_name, img_name)
+            img_paths = glob.glob(os.path.join(img_dir, folder_name, "*"))
+
+            for img_path in img_paths:
                 img_datum = Datum(
                     img_path=img_path,
                     class_label=class_label,

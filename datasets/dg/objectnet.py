@@ -35,14 +35,14 @@ class ObjectNet(DatasetBase):
         ) as file:
             folder_class_name_mapping = json.load(file)
 
-        image_dir = os.path.join(self._dataset_dir, "images")
-        folder_names = listdir_nonhidden(image_dir)
+        img_dir = os.path.join(self._dataset_dir, "images")
+        folder_names = listdir_nonhidden(img_dir)
         img_datums = []
 
         for class_label, folder_name in enumerate(folder_names):
             class_name = folder_class_name_mapping[folder_name]
 
-            img_paths = glob.glob(os.path.join(image_dir, folder_name, "*.png"))
+            img_paths = glob.glob(os.path.join(img_dir, folder_name, "*"))
 
             for img_path in img_paths:
                 img_datum = Datum(

@@ -1,8 +1,8 @@
+import glob
 import os
 
 from datasets.base_dataset import DatasetBase, Datum
 from datasets.build_dataset import DATASET_REGISTRY
-from utils import listdir_nonhidden
 
 from .imagenet import ImageNet
 
@@ -39,12 +39,12 @@ class ImageNetV2(DatasetBase):
         img_datums = []
 
         for class_label in range(1000):
-            img_names = listdir_nonhidden(os.path.join(img_dir, str(class_label)))
             folder_name = folder_names[class_label]
             class_name, _ = class_names_labels[folder_name]
 
-            for img_name in img_names:
-                img_path = os.path.join(img_dir, str(class_label), img_name)
+            img_paths = glob.glob(os.path.join(img_dir, str(class_label), "*"))
+
+            for img_path in img_paths:
                 img_datum = Datum(
                     img_path=img_path,
                     class_label=class_label,

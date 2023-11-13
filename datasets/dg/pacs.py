@@ -23,7 +23,6 @@ class PACS(DatasetBase):
         )
         root = os.path.abspath(os.path.expanduser(cfg.DATASET.ROOT))
         self._dataset_dir = os.path.join(root, self.dataset_dir)
-        self._image_dir = os.path.join(self._dataset_dir, "images")
         self._split_dir = os.path.join(self._dataset_dir, "splits")
         # The following images contain errors and should be ignored
         self._error_img_paths = ["sketch/dog/n02103406_4068-1.png"]
@@ -49,13 +48,14 @@ class PACS(DatasetBase):
     def read_data(self, input_domains, split):
         def _load_data_from_directory(directory):
             images_ = []
+            img_dir = os.path.join(self._dataset_dir, "images")
             with open(directory, "r") as file:
                 lines = file.readlines()
                 for line in lines:
                     img_path, class_label = line.split(" ")
                     if img_path in self._error_img_paths:
                         continue
-                    img_path = os.path.join(self._image_dir, img_path)
+                    img_path = os.path.join(img_dir, img_path)
                     class_label = int(class_label) - 1
                     images_.append((img_path, class_label))
 

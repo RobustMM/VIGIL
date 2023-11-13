@@ -1,11 +1,10 @@
+import glob
 import os
-import pickle
 import xml.etree.ElementTree as ET
 from collections import OrderedDict
 
 from datasets.base_dataset import DatasetBase, Datum
 from datasets.build_dataset import DATASET_REGISTRY
-from utils import listdir_nonhidden
 
 
 @DATASET_REGISTRY.register()
@@ -14,24 +13,11 @@ class ImageNet(DatasetBase):
         self._dataset_dir = "imagenet"
         root = os.path.abspath(os.path.expanduser(cfg.DATASET.ROOT))
         self._dataset_dir = os.path.join(root, self.dataset_dir)
-        self._preprocessed = os.path.join(self.dataset_dir, "preprocessed.pkl")
 
-        if os.path.exists(self._preprocessed):
-            with open(self._preprocessed, "rb") as f:
-                preprocessed = pickle.load(f)
-                train_data = preprocessed["train_data"]
-                test_data = preprocessed["test_data"]
-        else:
-            text_file = os.path.join(self._dataset_dir, "classnames.txt")
-            class_names_labels = self.read_class_names_labels(text_file)
-            train_data = self.read_data(class_names_labels, "train")
-            # Follow standard practice to perform evaluation on the val set
-            # Also used as the val set (so evaluate the last-step model)
-            test_data = self.read_data(class_names_labels, "val")
-
-            preprocessed = {"train_data": train_data, "test_data": test_data}
-            with open(self._preprocessed, "wb") as f:
-                pickle.dump(preprocessed, f, protocol=pickle.HIGHEST_PROTOCOL)
+        text_file = os.path.join(self._dataset_dir, "classnames.txt")
+        class_names_labels = self.read_class_names_labels(text_file)
+        train_data = self.read_data(class_names_labels, "train")
+        test_data = self.read_data(class_names_labels, "val")
 
         super().__init__(
             dataset_dir=self._dataset_dir,
@@ -75,11 +61,10 @@ class ImageNet(DatasetBase):
         img_datums = []
 
         for folder_name in folder_names:
-            img_names = listdir_nonhidden(os.path.join(split_dir, folder_name))
             class_name, class_label = class_names_labels[folder_name]
 
-            for img_name in img_names:
-                img_path = os.path.join(split_dir, folder_name, img_name)
+            img_paths = glob.glob(os.path.join(split_dir, folder_name, "*"))
+            for img_path in img_paths:
                 img_datum = Datum(
                     img_path=img_path,
                     class_label=class_label,
@@ -92,13 +77,17 @@ class ImageNet(DatasetBase):
 
     def _read_data_test(self, class_names_labels, split_dir):
         split_dir = os.path.join(self._dataset_dir, split_dir)
-        img_names = listdir_nonhidden(split_dir)
+
+        img_paths = glob.glob(os.path.join(split_dir, "*.JPEG"))
+
         img_datums = []
 
-        for img_name in img_names:
-            img_path = os.path.join(split_dir, img_name)
+        for img_path in img_paths:
             annotation_path = (
-                split_dir + "_annotations/" + img_name.split(".")[0] + ".xml"
+                split_dir
+                + "_annotations/"
+                + img_path.split(".")[0].split("/")[-1]
+                + ".xml"
             )
             tree = ET.parse(annotation_path)
             root = tree.getroot()
