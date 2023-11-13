@@ -9,6 +9,7 @@ PROMPT_TEMPLATES = {
     "ImageNetR": "a photo of a {}.",
     "ImageNetSketch": "a photo of a {}.",
     "ImageNetA": "a photo of a {}.",
+    "ObjectNet": "a photo of a {}.",
     "Digits": "a picture of a {}.",
     "PACS": "a picture of a {}.",
     "OfficeHome": "a picture of a {}.",
