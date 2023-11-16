@@ -1,3 +1,4 @@
+import numpy as np
 from clip import clip
 from sklearn.linear_model import LogisticRegression
 from tqdm import tqdm
@@ -46,7 +47,7 @@ class CLIPLinearProbe(Trainer):
         return embedding_list, class_label_list
 
     def train(self):
-        # search initialization
+        # Initialize start point of c for binary search
         search_list = [1e6, 1e4, 1e2, 1, 1e-2, 1e-4, 1e-6]
         acc_list = []
         for c in search_list:
@@ -56,5 +57,11 @@ class CLIPLinearProbe(Trainer):
             pred = clf.predict(self.embedding_val)
             acc_val = sum(pred == self.class_label_val) / len(self.class_label_val)
             acc_list.append(acc_val)
+
+        c_peak = search_list[np.argmax(acc_list)]
+        c_left, c_right = 1e1 * c_peak, 1e1 * c_peak
+
         print(acc_list, flush=True)
+        print("C Peak: {}".format(c_peak))
+
         exit()
