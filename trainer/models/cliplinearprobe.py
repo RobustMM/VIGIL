@@ -31,9 +31,6 @@ class CLIPLinearProbe(Trainer):
         self.embedding_test, self.class_label_test = self.get_embedding(
             clip_model, self.data_loader_test
         )
-        print(len(self.embedding_train))
-        print(len(self.embedding_val))
-        print(len(self.embedding_test))
 
     def get_embedding(self, clip_model, data_loader):
         embedding_list = []
