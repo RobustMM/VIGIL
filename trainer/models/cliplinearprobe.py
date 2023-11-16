@@ -22,22 +22,32 @@ class CLIPLinearProbe(Trainer):
             download_root="/data/dzha866/Project/VIGIL/data/",
         )
 
-        self.feature_train, self.class_label_train = self.get_feature(
+        self.embedding_train, self.class_label_train = self.get_embedding(
             clip_model, self.data_loader_train
         )
-        # self.feature_val, self.class_label_val = self.get_feature(
-        #     clip_model, self.data_loader_val
-        # )
-        # self.feature_test, self.class_label_test = self.get_feature(
-        #     clip_model, self.data_loader_test
-        # )
+        self.embedding_val, self.class_label_val = self.get_embedding(
+            clip_model, self.data_loader_val
+        )
+        self.embedding_test, self.class_label_test = self.get_embedding(
+            clip_model, self.data_loader_test
+        )
+        print(len(self.embedding_train))
+        print(len(self.embedding_val))
+        print(len(self.embedding_test))
 
-    def get_feature(self, clip_model, data_loader):
+    def get_embedding(self, clip_model, data_loader):
+        embedding_list = []
+        class_label_list = []
+
         for batch_data in tqdm(data_loader):
             data = batch_data["img"].cuda()
-            print(data)
-            exit()
+            embeddings = clip_model.encode_image(data).cpu()
 
+            for embedding in embeddings:
+                embedding_list.append(embedding.tolist())
+            class_label_list.extend(batch_data["class_label"].tolist())
+
+        return embedding_list, class_label_list
 
     def train(self):
         print("LinearProbe Train")
