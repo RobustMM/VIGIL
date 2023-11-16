@@ -1,4 +1,3 @@
-import torch
 from clip import clip
 from sklearn.linear_model import LogisticRegression
 from tqdm import tqdm
@@ -47,5 +46,15 @@ class CLIPLinearProbe(Trainer):
         return embedding_list, class_label_list
 
     def train(self):
-        print("LinearProbe Train")
+        # search initialization
+        search_list = [1e6, 1e4, 1e2, 1, 1e-2, 1e-4, 1e-6]
+        acc_list = []
+        for c in search_list:
+            clf = LogisticRegression(
+                solver="lbfgs", max_iter=1000, penalty="l2", C=c
+            ).fit(self.embedding_train, self.class_label_train)
+            pred = clf.predict(self.embedding_val)
+            acc_val = sum(pred == self.class_label_val) / len(self.class_label_val)
+            acc_list.append(acc_val)
+        print(acc_list, flush=True)
         exit()
