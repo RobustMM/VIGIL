@@ -93,7 +93,6 @@ def get_cfg_default():
     _C.MODEL.CoOp.BACKBONE = "ViT-B/32"
     _C.MODEL.CoOp.N_CTX = 16
     _C.MODEL.CoOp.CSC = False
-    _C.MODEL.CoOp.CTX_INIT = ""
     _C.MODEL.CoOp.PREC = "fp16"
     _C.MODEL.CoOp.CLASS_TOKEN_POSITION = "end"
 

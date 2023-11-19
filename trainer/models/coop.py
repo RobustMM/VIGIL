@@ -10,11 +10,14 @@ class PromptLearner(nn.Module):
         super().__init__()
         n_cls = len(class_names)
         n_ctx = cfg.MODEL.CoOp.N_CTX
-        ctx_init = cfg.MODEL.CoOp.CTX_INIT
-        dtype = clip_model.dtype
         ctx_dim = clip_model.ln_final.weight.shape[0]
-        clip_imgsize = clip_model.visual.input_resolution
-        cfg_imgsize = cfg.INPUT.SIZE[0]
+
+        assert (
+            cfg.INPUT.SIZE[0] == clip_model.visual.input_resolution
+        ), "Input Size {} must Equal to CLIP Image Encoder Input Resolution {}".format(
+            cfg.INPUT.SIZE,
+            (clip_model.visual.input_resolution, clip_model.visual.input_resolution),
+        )
 
         # Random Initialization for Context Vectors
         if cfg.MODEL.CoOp.CSC:
@@ -26,9 +29,9 @@ class PromptLearner(nn.Module):
 
         nn.init.normal_(ctx_vectors, std=0.02)
         prompt_prefix = " ".join(["X"] * n_ctx)
-
         print("Initial Context: {}".format(prompt_prefix))
         print("Number of Context Tokens: {}".format(n_ctx))
+        self.ctx = nn.Parameter(ctx_vectors)    # To be optimized
 
         exit()
 

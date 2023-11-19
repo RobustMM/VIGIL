@@ -30,6 +30,5 @@ MODEL:
     BACKBONE: "ViT-B/32"
     N_CTX: 16
     CSC: False
-    CTX_INIT: ""
     PREC: "fp16"
     CLASS_TOKEN_POSITION: "end"
