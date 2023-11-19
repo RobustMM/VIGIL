@@ -1,3 +1,4 @@
+import torch
 import torch.nn as nn
 from clip import clip
 
@@ -18,8 +19,16 @@ class PromptLearner(nn.Module):
         # Random Initialization for Context Vectors
         if cfg.MODEL.CoOp.CSC:
             print("Initializing Class-Specific Contexts")
+            ctx_vectors = torch.empty(n_cls, n_ctx, ctx_dim, dtype=clip_model.dtype)
         else:
             print("Initializing a Unified Context")
+            ctx_vectors = torch.empty(n_ctx, ctx_dim, dtype=clip_model.dtype)
+
+        nn.init.normal_(ctx_vectors, std=0.02)
+        prompt_prefix = " ".join(["X"] * n_ctx)
+
+        print("Initial Context: {}".format(prompt_prefix))
+        print("Number of Context Tokens: {}".format(n_ctx))
 
         exit()
 
@@ -48,6 +57,7 @@ class CoOp(Trainer):
             device="cpu",
             download_root="/data/dzha866/Project/VIGIL/data/",
         )
+        clip_model.half()
 
         print("Building Custom CLIP")
         self.model = CustomCLIP(
