@@ -41,7 +41,7 @@ def clean_cfg(cfg, model):
     """
     keys = list(cfg.MODEL.keys())
     for key in keys:
-        if key == "NAME" or key == model.upper():
+        if key == "NAME" or key == model:
             continue
         cfg.MODEL.pop(key, None)
 

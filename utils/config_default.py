@@ -80,11 +80,19 @@ def get_cfg_default():
     _C.MODEL.DOMAINMIX.ALPHA = 1.0
     _C.MODEL.DOMAINMIX.BETA = 1.0
 
+    # CLIPZeroShot
+    _C.MODEL.CLIPZeroshot = CN()
+    _C.MODEL.CLIPZeroshot.BACKBONE = "ViT-B/32"
+
+    # CLIPLinearProbe
+    _C.MODEL.CLIPLinearProbe = CN()
+    _C.MODEL.CLIPLinearProbe.BACKBONE = "ViT-B/32"
+
     # CoOp
-    _C.MODEL.COOP = CN()
-    _C.MODEL.COOP.BACKBONE = "ViT-B/32"
-    _C.MODEL.COOP.N_CTX = 16
-    _C.MODEL.COOP.PREC = "fp16"
+    _C.MODEL.CoOp = CN()
+    _C.MODEL.CoOp.BACKBONE = "ViT-B/32"
+    _C.MODEL.CoOp.N_CTX = 16
+    _C.MODEL.CoOp.PREC = "fp16"
 
     # ====================
     # Optimizer CfgNode

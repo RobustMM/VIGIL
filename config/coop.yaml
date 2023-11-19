@@ -26,7 +26,7 @@ TRAIN:
 
 MODEL:
   NAME: CoOp
-  COOP:
+  CoOp:
     BACKBONE: "ViT-B/32"
     N_CTX: 16
     PREC: "fp16"
