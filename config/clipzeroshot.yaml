@@ -25,4 +25,6 @@ TRAIN:
   PRINT_FREQ: 5
 
 MODEL:
-  BACKBONE: "ViT-B/32"
+  NAME: CLIPZeroShot
+  CLIPZeroShot:
+    BACKBONE: "ViT-B/32"

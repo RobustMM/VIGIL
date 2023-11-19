@@ -81,8 +81,8 @@ def get_cfg_default():
     _C.MODEL.DOMAINMIX.BETA = 1.0
 
     # CLIPZeroShot
-    _C.MODEL.CLIPZeroshot = CN()
-    _C.MODEL.CLIPZeroshot.BACKBONE = "ViT-B/32"
+    _C.MODEL.CLIPZeroShot = CN()
+    _C.MODEL.CLIPZeroShot.BACKBONE = "ViT-B/32"
 
     # CLIPLinearProbe
     _C.MODEL.CLIPLinearProbe = CN()

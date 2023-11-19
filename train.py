@@ -56,9 +56,6 @@ def setup_cfg(args):
 
     clean_cfg(cfg, args.model)
 
-    print(cfg)
-    exit()
-
     cfg.freeze()
 
     return cfg
@@ -95,7 +92,7 @@ def main(args):
     # print("** System info **\n{}\n".format(collect_env_info()))
 
     trainer = build_trainer(cfg)
-    if args.model == "CLIPZeroshot":
+    if args.model == "CLIPZeroShot":
         trainer.test()
     else:
         trainer.train()

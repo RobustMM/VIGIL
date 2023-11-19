@@ -21,12 +21,12 @@ PROMPT_TEMPLATES = {
 
 
 @MODEL_REGISTERY.register()
-class CLIPZeroshot(Trainer):
+class CLIPZeroShot(Trainer):
     def build_model(self):
         class_names = self.data_manager.dataset.class_names
 
         self.clip_model, _ = clip.load(
-            self.cfg.MODEL.BACKBONE,
+            self.cfg.MODEL.CLIPZeroShot.BACKBONE,
             device=self.device,
             download_root="/data/dzha866/Project/VIGIL/data/",
         )
