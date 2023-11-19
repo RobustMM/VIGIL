@@ -4,10 +4,25 @@ from clip import clip
 from trainer import MODEL_REGISTERY, Trainer
 
 
+class PromptLearner(nn.Module):
+    def __init__(self, cfg, class_names, clip_model):
+        super().__init__()
+        n_cls = len(class_names)
+        n_ctx = cfg.MODEL.CoOp.N_CTX
+
+        print(n_cls)
+        print(n_ctx)
+
+        exit()
+
+
 class CustomCLIP(nn.Module):
     def __init__(self, cfg, class_names, clip_model):
         super().__init__()
-        print("Hi")
+
+        # TODO: Build Prompt_Learner
+        self.prompt_learner = PromptLearner(cfg, class_names, clip_model)
+
         exit()
 
 
@@ -18,9 +33,6 @@ class CoOp(Trainer):
     Learning to Prompt for Vision-Language Models
     https://arxiv.org/abs/2109.01134
     """
-
-    def check_cfg(self, cfg):
-        pass
 
     def build_model(self):
         clip_model, _ = clip.load(
