@@ -31,6 +31,21 @@ def reset_cfg_from_args(cfg, args):
         cfg.MODEL.NAME = args.model
 
 
+def clean_cfg(cfg, model):
+    """Remove Unused Model Configs
+
+
+    Args:
+        cfg (_C): Config Node.
+        model (str): model name.
+    """
+    keys = list(cfg.MODEL.keys())
+    for key in keys:
+        if key == "NAME" or key == model.upper():
+            continue
+        cfg.MODEL.pop(key, None)
+
+
 def setup_cfg(args):
     cfg = get_cfg_default()
 
@@ -38,6 +53,11 @@ def setup_cfg(args):
         cfg.merge_from_file(args.model_config_file)
 
     reset_cfg_from_args(cfg, args)
+
+    clean_cfg(cfg, args.model)
+
+    print(cfg)
+    exit()
 
     cfg.freeze()
 

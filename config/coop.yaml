@@ -25,4 +25,8 @@ TRAIN:
   PRINT_FREQ: 5
 
 MODEL:
-  BACKBONE: "ViT-B/32"
+  NAME: CoOp
+  COOP:
+    BACKBONE: "ViT-B/32"
+    N_CTX: 16
+    PREC: "fp16"

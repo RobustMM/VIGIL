@@ -74,6 +74,18 @@ def get_cfg_default():
     _C.MODEL.NAME = ""
     _C.MODEL.BACKBONE = ""
 
+    # DomainMix
+    _C.MODEL.DOMAINMIX = CN()
+    _C.MODEL.DOMAINMIX.TYPE = "crossdomain"
+    _C.MODEL.DOMAINMIX.ALPHA = 1.0
+    _C.MODEL.DOMAINMIX.BETA = 1.0
+
+    # CoOp
+    _C.MODEL.COOP = CN()
+    _C.MODEL.COOP.BACKBONE = "ViT-B/32"
+    _C.MODEL.COOP.N_CTX = 16
+    _C.MODEL.COOP.PREC = "fp16"
+
     # ====================
     # Optimizer CfgNode
     # ====================
@@ -89,8 +101,8 @@ def get_cfg_default():
     _C.OPTIM.GAMMA = 0.1  # Factor to reduce learning rate
     _C.OPTIM.MAX_EPOCH = 10
     _C.OPTIM.WARMUP_EPOCH = (
-        -1
-    )  # Set WARMUP_EPOCH larger than 0 to activate warmup training
+        -1  # Set WARMUP_EPOCH larger than 0 to activate warmup training
+    )
     _C.OPTIM.WARMUP_TYPE = "linear"  # Either linear or constant
     _C.OPTIM.WARMUP_CONS_LR = 1e-5  # Constant learning rate when WARMUP_TYPE=constant
     _C.OPTIM.WARMUP_MIN_LR = 1e-5  # Minimum learning rate when WARMUP_TYPE=linear
