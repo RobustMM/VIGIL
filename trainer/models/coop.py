@@ -1,6 +1,14 @@
+import torch.nn as nn
+from clip import clip
+
 from trainer import MODEL_REGISTERY, Trainer
 
-from clip import clip
+
+class CustomCLIP(nn.Module):
+    def __init__(self, cfg, class_names, clip_model):
+        super().__init__()
+        print("Hi")
+        exit()
 
 
 @MODEL_REGISTERY.register()
@@ -15,15 +23,15 @@ class CoOp(Trainer):
         pass
 
     def build_model(self):
-        # print(self.cfg)
-        # print(self.data_manager.dataset.class_names)
-
-        self.clip_model, _ = clip.load(
-            self.cfg.MODEL.BACKBONE,
+        clip_model, _ = clip.load(
+            self.cfg.MODEL.CoOp.BACKBONE,
             device="cpu",
             download_root="/data/dzha866/Project/VIGIL/data/",
         )
 
-        print(self.cfg.MODEL)
+        print("Building Custom CLIP")
+        self.model = CustomCLIP(
+            self.cfg, self.data_manager.dataset.class_names, clip_model
+        )
 
         exit()
