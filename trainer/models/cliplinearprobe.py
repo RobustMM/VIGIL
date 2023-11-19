@@ -16,8 +16,8 @@ class CLIPLinearProbe(Trainer):
     def build_model(self):
         print("Build CLIP LinearProbe")
 
-        clip_model, preprocess = clip.load(
-            self.cfg.MODEL.BACKBONE,
+        clip_model, _ = clip.load(
+            self.cfg.MODEL.CLIPLinearProbe.BACKBONE,
             device=self.device,
             download_root="/data/dzha866/Project/VIGIL/data/",
         )
