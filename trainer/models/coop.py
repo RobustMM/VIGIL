@@ -9,9 +9,17 @@ class PromptLearner(nn.Module):
         super().__init__()
         n_cls = len(class_names)
         n_ctx = cfg.MODEL.CoOp.N_CTX
+        ctx_init = cfg.MODEL.CoOp.CTX_INIT
+        dtype = clip_model.dtype
+        ctx_dim = clip_model.ln_final.weight.shape[0]
+        clip_imgsize = clip_model.visual.input_resolution
+        cfg_imgsize = cfg.INPUT.SIZE[0]
 
-        print(n_cls)
-        print(n_ctx)
+        # Random Initialization for Context Vectors
+        if cfg.MODEL.CoOp.CSC:
+            print("Initializing Class-Specific Contexts")
+        else:
+            print("Initializing a Unified Context")
 
         exit()
 
