@@ -58,7 +58,17 @@ class CustomCLIP(nn.Module):
         super().__init__()
 
         self.prompt_learner = PromptLearner(cfg, class_names, clip_model)
+        self.promptes_tokenized = self.prompt_learner.prompts_tokenized
+        self.image_encoder = clip_model.visual
+        # TODO: Build TextEncoder
+        self.text_encoder = TextEncoder(clip_model)
+        self.logit_scale = clip_model.logit_scale
+        self.dtype = clip_model.dtype
 
+        exit()
+
+    def forward(self, image):
+        print("Custom CLIP Forward")
         exit()
 
 
