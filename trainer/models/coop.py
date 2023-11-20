@@ -1,15 +1,18 @@
 import torch
 import torch.nn as nn
 from clip import clip
+from clip.simple_tokenizer import SimpleTokenizer
 
 from trainer import MODEL_REGISTERY, Trainer
+
+_tokenizer = SimpleTokenizer()
 
 
 class PromptLearner(nn.Module):
     def __init__(self, cfg, class_names, clip_model):
         super().__init__()
-        n_cls = len(class_names)
-        n_ctx = cfg.MODEL.CoOp.N_CTX
+        self.n_cls = len(class_names)
+        self.n_ctx = cfg.MODEL.CoOp.N_CTX
         ctx_dim = clip_model.ln_final.weight.shape[0]
 
         assert (
@@ -22,17 +25,31 @@ class PromptLearner(nn.Module):
         # Random Initialization for Context Vectors
         if cfg.MODEL.CoOp.CSC:
             print("Initializing Class-Specific Contexts")
-            ctx_vectors = torch.empty(n_cls, n_ctx, ctx_dim, dtype=clip_model.dtype)
+            ctx_vectors = torch.empty(
+                self.n_cls, self.n_ctx, ctx_dim, dtype=clip_model.dtype
+            )
         else:
             print("Initializing a Unified Context")
-            ctx_vectors = torch.empty(n_ctx, ctx_dim, dtype=clip_model.dtype)
+            ctx_vectors = torch.empty(self.n_ctx, ctx_dim, dtype=clip_model.dtype)
 
         nn.init.normal_(ctx_vectors, std=0.02)
-        prompt_prefix = " ".join(["X"] * n_ctx)
+        prompt_prefix = " ".join(["X"] * self.n_ctx)
         print("Initial Context: {}".format(prompt_prefix))
-        print("Number of Context Tokens: {}".format(n_ctx))
-        self.ctx = nn.Parameter(ctx_vectors)    # To be optimized
+        print("Number of Context Tokens: {}".format(self.n_ctx))
+        self.ctx = nn.Parameter(ctx_vectors)  # To be optimized
 
+        class_names = [class_name.replace("_", " ") for class_name in class_names]
+        self.class_name_lens = [
+            len(_tokenizer.encode(class_name)) for class_name in class_names
+        ]
+        prompts = [prompt_prefix + " " + class_name + "." for class_name in class_names]
+        self.prompts_tokenized = torch.cat(
+            [clip.tokenize(prompt) for prompt in prompts]
+        )
+        self.class_token_position = cfg.MODEL.CoOp.CLASS_TOKEN_POSITION
+
+    def forward(self):
+        print("Prompt Learner Forward")
         exit()
 
 
@@ -40,7 +57,6 @@ class CustomCLIP(nn.Module):
     def __init__(self, cfg, class_names, clip_model):
         super().__init__()
 
-        # TODO: Build Prompt_Learner
         self.prompt_learner = PromptLearner(cfg, class_names, clip_model)
 
         exit()
