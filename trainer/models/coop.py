@@ -84,7 +84,7 @@ class CoOp(Trainer):
         clip_model, _ = clip.load(
             self.cfg.MODEL.CoOp.BACKBONE,
             device="cpu",
-            download_root="/data/dzha866/Project/VIGIL/data/",
+            download_root=self.cfg.DOWNLOAD_ROOT,
         )
         clip_model.half()
 

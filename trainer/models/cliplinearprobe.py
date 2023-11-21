@@ -19,7 +19,7 @@ class CLIPLinearProbe(Trainer):
         clip_model, _ = clip.load(
             self.cfg.MODEL.CLIPLinearProbe.BACKBONE,
             device=self.device,
-            download_root="/data/dzha866/Project/VIGIL/data/",
+            download_root=self.cfg.DOWNLOAD_ROOT
         )
 
         self.embedding_train, self.class_label_train = self.get_embedding(

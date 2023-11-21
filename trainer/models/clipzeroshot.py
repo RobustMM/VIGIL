@@ -28,7 +28,7 @@ class CLIPZeroShot(Trainer):
         self.clip_model, _ = clip.load(
             self.cfg.MODEL.CLIPZeroShot.BACKBONE,
             device=self.device,
-            download_root="/data/dzha866/Project/VIGIL/data/",
+            download_root=self.cfg.DOWNLOAD_ROOT,
         )
         prompt_template = PROMPT_TEMPLATES[self.cfg.DATASET.NAME]
         prompts = [
