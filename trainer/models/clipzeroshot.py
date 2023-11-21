@@ -2,22 +2,7 @@ import torch
 from clip import clip
 
 from trainer import MODEL_REGISTERY, Trainer
-
-PROMPT_TEMPLATES = {
-    "ImageNet": "a photo of a {}.",
-    "ImageNetV2": "a photo of a {}.",
-    "ImageNetR": "a photo of a {}.",
-    "ImageNetSketch": "a photo of a {}.",
-    "ImageNetA": "a photo of a {}.",
-    "ObjectNet": "a photo of a {}.",
-    "Digits": "a picture of a {}.",
-    "PACS": "a picture of a {}.",
-    "OfficeHome": "a picture of a {}.",
-    "VLCS": "a picture of a {}.",
-    "NICO": "a picture of a {}.",
-    "DomainNet": "a picture of a {}.",
-    "TerraInc": "a picture of a {}.",
-}
+from utils import PROMPT_TEMPLATES
 
 
 @MODEL_REGISTERY.register()
