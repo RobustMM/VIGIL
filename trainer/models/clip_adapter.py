@@ -1,11 +1,11 @@
-import os.path as osp
+import os
 
 import torch
 import torch.nn as nn
 from clip import clip
 from torch.nn import functional as F
 
-from trainer import MODEL_REGISTERY, Trainer
+from trainer import MODEL_REGISTRY, Trainer
 from utils import PROMPT_TEMPLATES
 
 
@@ -25,7 +25,6 @@ class Adapter(nn.Module):
 
 
 class TextEncoder(nn.Module):
-
     def __init__(self, cfg, classnames, clip_model):
         super().__init__()
         self.cfg = cfg
@@ -37,7 +36,7 @@ class TextEncoder(nn.Module):
         temp = PROMPT_TEMPLATES[self.cfg.DATASET.NAME]
         prompts = [temp.format(c.replace('_', ' ')) for c in self.classnames]
         prompts = torch.cat([clip.tokenize(p) for p in prompts])
-        prompts = prompts.to('cuda')
+        prompts = prompts.to(torch.cuda.current_device())
         text_features = self.clip_model.encode_text(prompts)
         x = text_features
         return x
@@ -71,17 +70,24 @@ class CustomCLIP(nn.Module):
         return logits
 
 
-@MODEL_REGISTERY.register()
+@MODEL_REGISTRY.register()
 class CLIP_Adapter(Trainer):
-    """ CLIP-Adapter """
+    """CLIP-Adapter.
+
+    CLIP-Adapter: Better Vision-Language Models with Feature Adapters
+    https://arxiv.org/abs/2110.04544
+    """
 
     def build_model(self):
         cfg = self.cfg
-        classnames = self.dm.dataset.classnames
+        classnames = self.data_manager.dataset.class_names
 
-        print(f'Loading CLIP (backbone: {cfg.MODEL.BACKBONE.NAME})')
-        clip_model = load_clip_to_cpu(cfg)
-        clip_model.float()
+        clip_model, _ = clip.load(
+            self.cfg.MODEL.CoOp.BACKBONE,
+            device=self.device,
+            download_root=os.path.abspath(os.path.expanduser("data")),
+        )
+        clip_model.half()
 
         print('Building custom CLIP')
         self.model = CustomCLIP(cfg, classnames, clip_model)
@@ -94,12 +100,10 @@ class CLIP_Adapter(Trainer):
         if cfg.MODEL.INIT_WEIGHTS:
             load_pretrained_weights(self.model.adapter, cfg.MODEL.INIT_WEIGHTS)
 
-        
         self.model.to(self.device)
         # NOTE: only give text_encoder.adapter to the optimizer
         self.optim = build_optimizer(self.model.adapter, cfg.OPTIM)
         self.sched = build_lr_scheduler(self.optim, cfg.OPTIM)
-        
 
         self.register_model('clip_adapter', self.model.adapter, self.optim, self.sched)
 
@@ -130,7 +134,7 @@ class CLIP_Adapter(Trainer):
         input = input.to(self.device)
         label = label.to(self.device)
         return input, label
-    
+
     def load_model(self, directory, epoch=None):
         if not directory:
             print(
@@ -157,11 +161,11 @@ class CLIP_Adapter(Trainer):
             checkpoint = load_checkpoint(model_path)
             state_dict = checkpoint['state_dict']
             epoch = checkpoint['epoch']
-            
+
             # Ignore fixed token vectors
             if 'token_prefix' in state_dict:
                 del state_dict['token_prefix']
-            
+
             if 'token_suffix' in state_dict:
                 del state_dict['token_suffix']
 
