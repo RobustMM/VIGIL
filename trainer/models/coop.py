@@ -1,3 +1,5 @@
+import os
+
 import torch
 import torch.nn as nn
 from clip import clip
@@ -84,7 +86,7 @@ class CoOp(Trainer):
         clip_model, _ = clip.load(
             self.cfg.MODEL.CoOp.BACKBONE,
             device="cpu",
-            download_root=self.cfg.DOWNLOAD_ROOT,
+            download_root=os.path.abspath(os.path.expanduser("data")),
         )
         clip_model.half()
 

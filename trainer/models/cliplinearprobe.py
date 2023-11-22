@@ -1,3 +1,5 @@
+import os
+
 import numpy as np
 from clip import clip
 from sklearn.linear_model import LogisticRegression
@@ -19,7 +21,7 @@ class CLIPLinearProbe(Trainer):
         clip_model, _ = clip.load(
             self.cfg.MODEL.CLIPLinearProbe.BACKBONE,
             device=self.device,
-            download_root=self.cfg.DOWNLOAD_ROOT
+            download_root=os.path.abspath(os.path.expanduser("data")),
         )
 
         self.embedding_train, self.class_label_train = self.get_embedding(

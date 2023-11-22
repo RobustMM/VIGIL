@@ -1,3 +1,5 @@
+import os
+
 import torch
 from clip import clip
 
@@ -13,7 +15,7 @@ class CLIPZeroShot(Trainer):
         self.clip_model, _ = clip.load(
             self.cfg.MODEL.CLIPZeroShot.BACKBONE,
             device=self.device,
-            download_root=self.cfg.DOWNLOAD_ROOT,
+            download_root=os.path.abspath(os.path.expanduser("data")),
         )
         prompt_template = PROMPT_TEMPLATES[self.cfg.DATASET.NAME]
         prompts = [

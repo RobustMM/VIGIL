@@ -7,7 +7,6 @@ def get_cfg_default():
     # ====================
     _C = CN()
     _C.OUTPUT_DIR = "./output/"
-    _C.DOWNLOAD_ROOT = "/data/dzha866/Project/VIGIL/data/"
     _C.SEED = -1
 
     # ====================
