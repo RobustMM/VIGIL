@@ -5,7 +5,7 @@ import torch.nn as nn
 from clip import clip
 from clip.simple_tokenizer import SimpleTokenizer
 
-from trainer import MODEL_REGISTERY, Trainer
+from trainer import MODEL_REGISTRY, Trainer
 
 _tokenizer = SimpleTokenizer()
 
@@ -74,7 +74,7 @@ class CustomCLIP(nn.Module):
         exit()
 
 
-@MODEL_REGISTERY.register()
+@MODEL_REGISTRY.register()
 class CoOp(Trainer):
     """Context Optimization (CoOp).
 

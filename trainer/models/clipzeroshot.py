@@ -3,11 +3,11 @@ import os
 import torch
 from clip import clip
 
-from trainer import MODEL_REGISTERY, Trainer
+from trainer import MODEL_REGISTRY, Trainer
 from utils import PROMPT_TEMPLATES
 
 
-@MODEL_REGISTERY.register()
+@MODEL_REGISTRY.register()
 class CLIPZeroShot(Trainer):
     def build_model(self):
         class_names = self.data_manager.dataset.class_names

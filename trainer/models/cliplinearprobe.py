@@ -5,10 +5,10 @@ from clip import clip
 from sklearn.linear_model import LogisticRegression
 from tqdm import tqdm
 
-from trainer import MODEL_REGISTERY, Trainer
+from trainer import MODEL_REGISTRY, Trainer
 
 
-@MODEL_REGISTERY.register()
+@MODEL_REGISTRY.register()
 class CLIPLinearProbe(Trainer):
     def __init__(self, cfg):
         self.num_step = 8
