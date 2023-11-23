@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 
-AVAI_OPTIMS = ["sgd"]
+AVAILABLE_OPTIMIZERS = ["sgd"]
 
 
 def build_optimizer(model, optim_cfg, param_groups=None):
@@ -12,9 +12,11 @@ def build_optimizer(model, optim_cfg, param_groups=None):
         optim_cfg (CfgNode): optimization config.
         param_groups: If provided, directly optimize param_groups and abandon model
     """
-    if optim_cfg.NAME not in AVAI_OPTIMS:
+    if optim_cfg.NAME not in AVAILABLE_OPTIMIZERS:
         raise ValueError(
-            "optim must be one of {}, but got {}".format(AVAI_OPTIMS, optim_cfg.NAME)
+            "Optimizer must be one of {}, but got {}".format(
+                AVAILABLE_OPTIMIZERS, optim_cfg.NAME
+            )
         )
 
     if isinstance(model, nn.Module):

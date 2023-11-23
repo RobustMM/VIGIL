@@ -5,7 +5,7 @@ import torch.nn as nn
 from clip import clip
 from clip.simple_tokenizer import SimpleTokenizer
 
-from optim import build_optimizer
+from optim import build_lr_scheduler, build_optimizer
 from trainer import MODEL_REGISTRY, Trainer
 
 _tokenizer = SimpleTokenizer()
@@ -115,6 +115,7 @@ class CoOp(Trainer):
         self.model.to(self.device)
 
         # NOTE: Only Give prompt_learner to the Optimizer
-        self.optim = build_optimizer(self.model.prompt_learner, self.cfg.OPTIM)
-        print(self.optim)
+        self.optimizer = build_optimizer(self.model.prompt_learner, self.cfg.OPTIM)
+        self.lr_scheduler = build_lr_scheduler(self.optimizer, self.cfg.OPTIM)
+
         exit()
