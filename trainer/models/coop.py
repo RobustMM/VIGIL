@@ -10,6 +10,20 @@ from trainer import MODEL_REGISTRY, Trainer
 _tokenizer = SimpleTokenizer()
 
 
+class CustomTextEncoder(nn.Module):
+    def __init__(self, clip_model):
+        super().__init__()
+        self.transformer = clip_model.transformer
+        self.positional_embedding = clip_model.positional_embedding
+        self.ln_final = clip_model.ln_final
+        self.text_projection = clip_model.text_projection
+        self.dtype = clip_model.dtype
+
+    def forward(self, prompts, prompts_tokenized):
+        print("CustomTextEncoder Forward")
+        exit()
+
+
 class PromptLearner(nn.Module):
     def __init__(self, cfg, class_names, clip_model):
         super().__init__()
@@ -62,8 +76,7 @@ class CustomCLIP(nn.Module):
         self.prompt_learner = PromptLearner(cfg, class_names, clip_model)
         self.promptes_tokenized = self.prompt_learner.prompts_tokenized
         self.image_encoder = clip_model.visual
-        # TODO: Build TextEncoder
-        self.text_encoder = TextEncoder(clip_model)
+        self.text_encoder = CustomTextEncoder(clip_model)
         self.logit_scale = clip_model.logit_scale
         self.dtype = clip_model.dtype
 
