@@ -104,6 +104,8 @@ def get_cfg_default():
     _C.OPTIM.LR = 0.0002
     _C.OPTIM.WEIGHT_DECAY = 5e-4
     _C.OPTIM.MOMENTUM = 0.9
+    _C.OPTIM.SGD_DAMPENING = 0
+    _C.OPTIM.SGD_NESTEROV = False
     _C.OPTIM.ADAM_BETA1 = 0.9
     _C.OPTIM.ADAM_BETA2 = 0.999
     _C.OPTIM.LR_SCHEDULER = "cosine"

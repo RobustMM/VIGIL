@@ -5,6 +5,7 @@ import torch.nn as nn
 from clip import clip
 from clip.simple_tokenizer import SimpleTokenizer
 
+from optim import build_optimizer
 from trainer import MODEL_REGISTRY, Trainer
 
 _tokenizer = SimpleTokenizer()
@@ -80,8 +81,6 @@ class CustomCLIP(nn.Module):
         self.logit_scale = clip_model.logit_scale
         self.dtype = clip_model.dtype
 
-        exit()
-
     def forward(self, image):
         print("Custom CLIP Forward")
         exit()
@@ -108,4 +107,14 @@ class CoOp(Trainer):
             self.cfg, self.data_manager.dataset.class_names, clip_model
         )
 
+        print("Turning Off Gradients in Image and Text Encoder")
+        for name, param in self.model.named_parameters():
+            if "prompt_learner" not in name:
+                param.requires_grad_(False)
+
+        self.model.to(self.device)
+
+        # NOTE: Only Give prompt_learner to the Optimizer
+        self.optim = build_optimizer(self.model.prompt_learner, self.cfg.OPTIM)
+        print(self.optim)
         exit()
