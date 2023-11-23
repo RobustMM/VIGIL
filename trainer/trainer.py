@@ -78,6 +78,8 @@ class Trainer:
     def run_epoch(self):
         print(self.current_epoch)
 
+        exit()
+
     def before_epoch(self):
         pass
 
