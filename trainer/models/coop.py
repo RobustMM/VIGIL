@@ -117,5 +117,3 @@ class CoOp(Trainer):
         # NOTE: Only Give prompt_learner to the Optimizer
         self.optimizer = build_optimizer(self.model.prompt_learner, self.cfg.OPTIM)
         self.lr_scheduler = build_lr_scheduler(self.optimizer, self.cfg.OPTIM)
-
-        exit()
