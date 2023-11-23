@@ -1,6 +1,17 @@
 import torch
+from torch.optim.lr_scheduler import _LRScheduler
 
 AVAILABLE_LR_SCHEDULERS = ["cosine"]
+
+
+class _BaseWarmupScheduler(_LRScheduler):
+    def __init__(self, optimizer, successor, warmup_epoch, last_epoch=-1):
+        pass
+
+
+class ConstantWarmupScheduler(_BaseWarmupScheduler):
+    def __init__(self, optimizer, successor, warmup_epoch, cons_lr, last_epoch=-1):
+        pass
 
 
 def build_lr_scheduler(optimizer, optim_cfg):
@@ -27,3 +38,5 @@ def build_lr_scheduler(optimizer, optim_cfg):
         scheduler = ConstantWarmupScheduler(
             optimizer, scheduler, optim_cfg.WARM_EPOCH, optim_cfg.WARMUP_CONS_LR
         )
+
+    return scheduler
