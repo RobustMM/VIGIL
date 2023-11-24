@@ -81,6 +81,16 @@ class Trainer:
         losses = MetricMeter()
         batch_time = AverageMeter()
         data_time = AverageMeter()
+        self.num_batches = len(self.data_loader_train)
+        end_time = time.time()
+
+        for self.batch_idx, batch_data in enumerate(self.data_loader_train):
+            data_time.update(time.time() - end_time)
+            loss_summary = self.forward_backward(batch_data)
+            batch_time.update(time.time() - end_time)
+            losses.update(loss_summary)
+
+            exit()
 
         exit()
 
