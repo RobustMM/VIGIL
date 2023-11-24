@@ -7,6 +7,8 @@ from torch.utils.tensorboard import SummaryWriter
 from datasets import DataManager
 from evaluator import build_evaluator
 
+from utils import MetricMeter, AverageMeter
+
 
 class Trainer:
     """Generic Trainer Class for Implementing Generic Function"""
@@ -76,7 +78,9 @@ class Trainer:
 
     # TODO: run_epoch()
     def run_epoch(self):
-        print(self.current_epoch)
+        losses = MetricMeter()
+        batch_time = AverageMeter()
+        data_time = AverageMeter()
 
         exit()
 
