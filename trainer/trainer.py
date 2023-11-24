@@ -123,7 +123,7 @@ class Trainer:
 
         return list(evaluation_results.values())[0]
 
-    def parse_barch_train(self, batch_data):
+    def parse_batch_train(self, batch_data):
         raise NotImplementedError
 
     def parse_batch_test(self, batch_data):

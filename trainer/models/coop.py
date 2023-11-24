@@ -117,3 +117,14 @@ class CoOp(Trainer):
         # NOTE: Only Give prompt_learner to the Optimizer
         self.optimizer = build_optimizer(self.model.prompt_learner, self.cfg.OPTIM)
         self.lr_scheduler = build_lr_scheduler(self.optimizer, self.cfg.OPTIM)
+
+    def forward_backward(self, batch_data):
+        image, class_label = self.parse_batch_train(batch_data)
+        print(class_label)
+        exit()
+
+    def parse_batch_train(self, batch_data):
+        image = batch_data["img"].to(self.device)
+        class_label = batch_data["class_label"].to(self.device)
+
+        return image, class_label

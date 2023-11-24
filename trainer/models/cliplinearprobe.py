@@ -39,8 +39,8 @@ class CLIPLinearProbe(Trainer):
         class_label_list = []
 
         for batch_data in tqdm(data_loader):
-            data = batch_data["img"].cuda()
-            embeddings = clip_model.encode_image(data).cpu()
+            image = batch_data["img"].cuda()
+            embeddings = clip_model.encode_image(image).cpu()
 
             for embedding in embeddings:
                 embedding_list.append(embedding.tolist())
