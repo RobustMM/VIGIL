@@ -65,6 +65,7 @@ class PromptLearner(nn.Module):
         )
         self.class_token_position = cfg.MODEL.CoOp.CLASS_TOKEN_POSITION
 
+    # TODO: PromptLearner Forward
     def forward(self):
         print("Prompt Learner Forward")
         exit()
@@ -81,8 +82,14 @@ class CustomCLIP(nn.Module):
         self.logit_scale = clip_model.logit_scale
         self.dtype = clip_model.dtype
 
+    # TODO: CustomCLIP
     def forward(self, image):
         print("Custom CLIP Forward")
+        image_embeddings = self.image_encoder(image)
+
+        prompts = self.prompt_learner()
+        print(prompts)
+
         exit()
 
 
@@ -100,7 +107,6 @@ class CoOp(Trainer):
             device="cpu",
             download_root=os.path.abspath(os.path.expanduser("data")),
         )
-        clip_model.half()
 
         print("Building Custom CLIP")
         self.model = CustomCLIP(
@@ -118,9 +124,12 @@ class CoOp(Trainer):
         self.optimizer = build_optimizer(self.model.prompt_learner, self.cfg.OPTIM)
         self.lr_scheduler = build_lr_scheduler(self.optimizer, self.cfg.OPTIM)
 
+    # TODO: CoOp Forward
     def forward_backward(self, batch_data):
         image, class_label = self.parse_batch_train(batch_data)
-        print(class_label)
+        output = self.model(image)
+        print(output)
+
         exit()
 
     def parse_batch_train(self, batch_data):
