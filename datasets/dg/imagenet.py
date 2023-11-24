@@ -79,7 +79,7 @@ class ImageNet(DatasetBase):
     def _read_data_test(self, class_names_labels, split_dir):
         split_dir = os.path.join(self._dataset_dir, split_dir)
 
-        img_paths = glob.glob(os.path.join(split_dir, "*.JPEG"))
+        img_paths = sorted(glob.glob(os.path.join(split_dir, "*.JPEG")))
 
         img_datums = []
 
