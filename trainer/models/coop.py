@@ -63,14 +63,34 @@ class PromptLearner(nn.Module):
         self.prompts_tokenized = torch.cat(
             [clip.tokenize(prompt) for prompt in prompts]
         )
+
+        with torch.no_grad():
+            prompts_embedding = clip_model.token_embedding(self.prompts_tokenized).type(
+                clip_model.dtype
+            )
+
+        self.register_buffer("token_prefix", prompts_embedding[:, :1, :])  # SOS
+        self.register_buffer(
+            "token_suffix", prompts_embedding[:, 1 + self.n_ctx :, :]
+        )  # CLS, EOS
+
         self.class_token_position = cfg.MODEL.CoOp.CLASS_TOKEN_POSITION
 
     # TODO: PromptLearner Forward
     def forward(self):
         ctx = self.ctx
 
+        # Copy ctx to every class
         if ctx.dim() == 2:
             ctx = ctx.unsqueeze(0).expand(self.n_cls, -1, -1)
+
+        prefix = self.token_prefix
+        suffix = self.token_suffix
+
+        if self.class_token_position == "end":
+            print("Hi")
+        else:
+            raise ValueError
 
         exit()
 
