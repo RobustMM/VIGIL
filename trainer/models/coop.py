@@ -67,7 +67,11 @@ class PromptLearner(nn.Module):
 
     # TODO: PromptLearner Forward
     def forward(self):
-        print("Prompt Learner Forward")
+        ctx = self.ctx
+
+        if ctx.dim() == 2:
+            ctx = ctx.unsqueeze(0).expand(self.n_cls, -1, -1)
+
         exit()
 
 
