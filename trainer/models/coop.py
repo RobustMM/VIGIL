@@ -170,6 +170,10 @@ class CoOp(Trainer):
         output = self.model(image)
         loss = F.cross_entropy(output, class_label)
 
+        print(output)
+        print(class_label)
+        exit()
+
         self.optimizer.zero_grad()
         self.detect_abnormal_loss(loss)
         loss.backward()
