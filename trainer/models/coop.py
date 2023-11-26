@@ -21,8 +21,20 @@ class CustomTextEncoder(nn.Module):
         self.dtype = clip_model.dtype
 
     def forward(self, prompts, prompts_tokenized):
-        print("CustomTextEncoder Forward")
-        exit()
+        x = prompts + self.positional_embedding.type(self.dtype)
+        x = x.permute(1, 0, 2)  # NLD -> LND
+        x = self.transformer(x)
+        x = x.permute(1, 0, 2)  # LND -> NLD
+        x = self.ln_final(x).type(self.dtype)
+
+        # x.shape = [batch_size, n_ctx, transformer.width]
+        # take features from the eot embedding (eot_token is the highest number in each sequence)
+        x = (
+            x[torch.arange(x.shape[0]), prompts_tokenized.argmax(dim=-1)]
+            @ self.text_projection
+        )
+
+        return x
 
 
 class PromptLearner(nn.Module):
@@ -72,11 +84,10 @@ class PromptLearner(nn.Module):
         self.register_buffer("token_prefix", prompts_embedding[:, :1, :])  # SOS
         self.register_buffer(
             "token_suffix", prompts_embedding[:, 1 + self.n_ctx :, :]
-        )  # CLS, EOS
+        )  # CLS and EOS
 
         self.class_token_position = cfg.MODEL.CoOp.CLASS_TOKEN_POSITION
 
-    # TODO: PromptLearner Forward
     def forward(self):
         ctx = self.ctx
 
@@ -108,11 +119,10 @@ class CustomCLIP(nn.Module):
 
     # TODO: CustomCLIP
     def forward(self, image):
-        print("Custom CLIP Forward")
-        image_embeddings = self.image_encoder(image)
+        image_features = self.image_encoder(image)
 
         prompts = self.prompt_learner()
-        print(prompts)
+        text_features = self.text_encoder(prompts, self.promptes_tokenized)
 
         exit()
 
