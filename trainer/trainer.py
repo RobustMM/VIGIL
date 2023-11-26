@@ -1,13 +1,13 @@
+import datetime
 import time
 
 import torch
-from tqdm import tqdm
 from torch.utils.tensorboard import SummaryWriter
+from tqdm import tqdm
 
 from datasets import DataManager
 from evaluator import build_evaluator
-
-from utils import MetricMeter, AverageMeter
+from utils import AverageMeter, MetricMeter
 
 
 class Trainer:
@@ -76,7 +76,6 @@ class Trainer:
         # self.save_model()
         self.test()
 
-    # TODO: run_epoch()
     def run_epoch(self):
         losses = MetricMeter()
         batch_time = AverageMeter()
@@ -90,9 +89,27 @@ class Trainer:
             batch_time.update(time.time() - end_time)
             losses.update(loss_summary)
 
-            exit()
+            if (
+                (self.batch_idx + 1) % self.cfg.TRAIN.PRINT_FREQ == 0
+                or self.num_batches < self.cfg.TRAIN.PRINT_FREQ
+            ):
+                num_batches_remain = 0
+                num_batches_remain += self.num_batches - self.batch_idx - 1
+                num_batches_remain += (
+                    self.max_epoch - self.current_epoch - 1
+                ) * self.num_batches
+                eta_seconds = batch_time.avg * num_batches_remain
+                eta = str(datetime.timedelta(seconds=int(eta_seconds)))
 
-        exit()
+                info = []
+                info += [f"epoch [{self.current_epoch + 1}/{self.max_epoch}]"]
+                info += [f"batch [{self.batch_idx + 1}/{self.num_batches}]"]
+                info += [f"{losses}"]
+                info += [f"lr {self.optimizer.param_groups[0]['lr']:.4e}"]
+                info += [f"eta {eta}"]
+                print(" ".join(info))
+
+            end_time = time.time()
 
     def before_epoch(self):
         pass
