@@ -4,7 +4,9 @@ import torch
 import torch.nn as nn
 from clip import clip
 from clip.simple_tokenizer import SimpleTokenizer
+from torch.nn import functional as F
 
+from metrics import compute_accuracy
 from optim import build_lr_scheduler, build_optimizer
 from trainer import MODEL_REGISTRY, Trainer
 
@@ -167,9 +169,22 @@ class CoOp(Trainer):
     def forward_backward(self, batch_data):
         image, class_label = self.parse_batch_train(batch_data)
         output = self.model(image)
-        print(output)
+        loss = F.cross_entropy(output, class_label)
 
-        exit()
+        self.optimizer.zero_grad()
+        self.detect_abnormal_loss(loss)
+        loss.backward()
+        self.optimizer.step()
+
+        loss_summary = {
+            "loss": loss.item(),
+            "acc": compute_accuracy(output, class_label)[0].item(),
+        }
+
+        if (self.batch_idx + 1) == self.num_batches:
+            self.lr_scheduler().step()
+
+        return loss_summary
 
     def parse_batch_train(self, batch_data):
         image = batch_data["img"].to(self.device)
