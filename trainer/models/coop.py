@@ -88,11 +88,11 @@ class PromptLearner(nn.Module):
         suffix = self.token_suffix
 
         if self.class_token_position == "end":
-            print("Hi")
+            prompts = torch.cat([prefix, ctx, suffix], dim=1)
         else:
             raise ValueError
 
-        exit()
+        return prompts
 
 
 class CustomCLIP(nn.Module):
