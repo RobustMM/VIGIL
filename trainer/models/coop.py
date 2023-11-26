@@ -165,7 +165,6 @@ class CoOp(Trainer):
         self.optimizer = build_optimizer(self.model.prompt_learner, self.cfg.OPTIM)
         self.lr_scheduler = build_lr_scheduler(self.optimizer, self.cfg.OPTIM)
 
-    # TODO: CoOp Forward
     def forward_backward(self, batch_data):
         image, class_label = self.parse_batch_train(batch_data)
         output = self.model(image)
