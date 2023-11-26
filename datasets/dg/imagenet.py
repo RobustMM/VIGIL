@@ -16,7 +16,6 @@ class ImageNet(DatasetBase):
 
         text_file = os.path.join(self._dataset_dir, "classnames.txt")
         class_names_labels = self.read_class_names_labels(text_file)
-        # TODO: Debug Train_Data_Order
         train_data = self.read_data(class_names_labels, "val")
         test_data = self.read_data(class_names_labels, "val")
 
