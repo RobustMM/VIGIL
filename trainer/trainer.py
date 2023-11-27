@@ -114,8 +114,10 @@ class Trainer:
     def before_epoch(self):
         pass
 
+    # TODO: after_epoch
     def after_epoch(self):
-        pass
+        print("Hi")
+        exit()
 
     @torch.no_grad()
     def test(self, split=None):
