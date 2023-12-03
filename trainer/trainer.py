@@ -205,9 +205,7 @@ class Trainer:
     def save_model(
         self,
         current_epoch,
-        directory,
-        is_best=False,
-        val_result=None,
+        save_dir,
         model_name="name",
     ):
         model_names = self.get_model_names()
@@ -223,15 +221,16 @@ class Trainer:
             if self._lr_schedulers[model_name] is not None:
                 lr_scheduler_state_dict = self._lr_schedulers[model_name].state_dict()
 
-            save_checkpoint(
-                {
-                    "state_dict": model_dict,
-                    "epoch": current_epoch + 1,
-                    "optimizer": optimizer_dict,
-                    "scheduler": lr_scheduler_state_dict,
-                    "val_result": val_result,
-                },
-                os.path.join(directory, model_name),
-                is_best=is_best,
-                model_name=model_name,
-            )
+            # Remove "module." in state_dict's keys
+            new_model_dict = OrderedDict()
+            for key, value in model_dict.items():
+                if key.startswith("module."):
+                    key = key[7:]
+                new_model_dict[key] = value
+            model_dict = new_model_dict
+
+            # Save Model
+            if not model_name:
+                model_name = "model.pth.tar-" + str(current_epoch)
+            
+            fpath = os.path.join(save_dir, model_name)

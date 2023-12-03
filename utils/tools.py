@@ -90,4 +90,20 @@ def listdir_nonhidden(path, sort=True):
 def save_checkpoint(
     state, save_dir, is_best=False, remove_module_from_keys=True, model_name=""
 ):
+    """Save checkpoint.
+
+    Args:
+        state (dict): dictionary.
+        save_dir (str): directory to save checkpoint.
+        is_best (bool, optional): if True, this checkpoint will be copied and named ``model-best.pth.tar``.
+        Default is False.
+        remove_module_from_keys (bool, optional): whether to remove "module." from layer names.
+        Default is True.
+        model_name (str, optional): model name to save.
+    """
+
     print("Save Model")
+    print(save_dir)
+    mkdir_if_missing(save_dir)
+
+    exit()
