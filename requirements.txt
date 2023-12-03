@@ -1,0 +1,13 @@
+ftfy
+regex
+tqdm
+yacs
+gdown
+tensorboard
+future
+scipy
+scikit-learn
+packaging
+wilds
+tabulate
+openai-clip
