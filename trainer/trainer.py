@@ -116,8 +116,8 @@ class Trainer:
 
     # TODO: after_epoch
     def after_epoch(self):
-        print("Hi")
-        exit()
+        if self.current_epoch + 1 == self.max_epoch:
+            self.save_model(self.current_epoch, self.output_dir)
 
     @torch.no_grad()
     def test(self, split=None):
@@ -159,5 +159,6 @@ class Trainer:
     def get_current_lr(self):
         raise NotImplementedError
 
-    def save_model(self):
-        raise NotImplementedError
+    def save_model(self, current_epoch, directory, is_best=False, val_result=None, model_name="name"):
+        print("Save Model")
+        exit()
