@@ -165,15 +165,23 @@ class CoOp(Trainer):
         self.optimizer = build_optimizer(self.model.prompt_learner, self.cfg.OPTIM)
         self.lr_scheduler = build_lr_scheduler(self.optimizer, self.cfg.OPTIM)
 
+        self.register_model(
+            "prompt_learner",
+            self.model.prompt_learner,
+            self.optimizer,
+            self.lr_scheduler,
+        )
+
     def forward_backward(self, batch_data):
         image, class_label = self.parse_batch_train(batch_data)
         output = self.model(image)
         loss = F.cross_entropy(output, class_label)
 
-        self.optimizer.zero_grad()
-        self.detect_abnormal_loss(loss)
-        loss.backward()
-        self.optimizer.step()
+        # self.optimizer.zero_grad()
+        # self.detect_abnormal_loss(loss)
+        # loss.backward()
+        # self.optimizer.step()
+        self.model_backward_and_update(loss)
 
         loss_summary = {
             "loss": loss.item(),

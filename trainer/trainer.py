@@ -1,5 +1,6 @@
 import datetime
 import time
+from collections import OrderedDict
 
 import torch
 from torch.utils.tensorboard import SummaryWriter
@@ -28,6 +29,10 @@ class Trainer:
         self.data_loader_test = self.data_manager.data_loader_test
         self.num_classes = self.data_manager.num_classes
         self.class_label_name_mapping = self.data_manager.class_label_name_mapping
+
+        self._models = OrderedDict()
+        self._optimizers = OrderedDict()
+        self._lr_schedulers = OrderedDict()
 
         # Build Model
         self.build_model()
@@ -114,7 +119,6 @@ class Trainer:
     def before_epoch(self):
         pass
 
-    # TODO: after_epoch
     def after_epoch(self):
         if self.current_epoch + 1 == self.max_epoch:
             self.save_model(self.current_epoch, self.output_dir)
@@ -159,6 +163,23 @@ class Trainer:
     def get_current_lr(self):
         raise NotImplementedError
 
-    def save_model(self, current_epoch, directory, is_best=False, val_result=None, model_name="name"):
+    def register_model(
+        self, name="model", model=None, optimizer=None, lr_scheduler=None
+    ):
+        assert name not in self._models, "Found duplicate model names."
+
+        self._models[name] = model
+        self._optimizers[name] = optimizer
+        self._lr_schedulers[name] = lr_scheduler
+
+    # TODO: Save_Model
+    def save_model(
+        self,
+        current_epoch,
+        directory,
+        is_best=False,
+        val_result=None,
+        model_name="name",
+    ):
         print("Save Model")
         exit()
