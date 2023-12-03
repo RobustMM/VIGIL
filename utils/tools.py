@@ -85,3 +85,9 @@ def listdir_nonhidden(path, sort=True):
     if sort:
         items.sort()
     return items
+
+
+def save_checkpoint(
+    state, save_dir, is_best=False, remove_module_from_keys=True, model_name=""
+):
+    print("Save Model")

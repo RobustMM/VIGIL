@@ -1,4 +1,5 @@
 import datetime
+import os
 import time
 from collections import OrderedDict
 
@@ -8,7 +9,7 @@ from tqdm import tqdm
 
 from datasets import DataManager
 from evaluator import build_evaluator
-from utils import AverageMeter, MetricMeter
+from utils import AverageMeter, MetricMeter, save_checkpoint
 
 
 class Trainer:
@@ -209,5 +210,28 @@ class Trainer:
         val_result=None,
         model_name="name",
     ):
-        print("Save Model")
-        exit()
+        model_names = self.get_model_names()
+
+        for model_name in model_names:
+            model_dict = self._models[model_name].state_dict()
+
+            optimizer_dict = None
+            if self._optimizers[model_name] is not None:
+                optimizer_dict = self._optimizers[model_name].state_dict()
+
+            lr_scheduler_state_dict = None
+            if self._lr_schedulers[model_name] is not None:
+                lr_scheduler_state_dict = self._lr_schedulers[model_name].state_dict()
+
+            save_checkpoint(
+                {
+                    "state_dict": model_dict,
+                    "epoch": current_epoch + 1,
+                    "optimizer": optimizer_dict,
+                    "scheduler": lr_scheduler_state_dict,
+                    "val_result": val_result,
+                },
+                os.path.join(directory, model_name),
+                is_best=is_best,
+                model_name=model_name,
+            )
