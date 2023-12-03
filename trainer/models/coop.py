@@ -165,7 +165,7 @@ class CoOp(Trainer):
         self.optimizer = build_optimizer(self.model.prompt_learner, self.cfg.OPTIM)
         self.lr_scheduler = build_lr_scheduler(self.optimizer, self.cfg.OPTIM)
 
-        self.register_model(
+        self.model_registeration(
             "prompt_learner",
             self.model.prompt_learner,
             self.optimizer,
@@ -177,10 +177,6 @@ class CoOp(Trainer):
         output = self.model(image)
         loss = F.cross_entropy(output, class_label)
 
-        # self.optimizer.zero_grad()
-        # self.detect_abnormal_loss(loss)
-        # loss.backward()
-        # self.optimizer.step()
         self.model_backward_and_update(loss)
 
         loss_summary = {

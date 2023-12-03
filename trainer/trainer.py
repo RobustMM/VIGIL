@@ -49,6 +49,27 @@ class Trainer:
         if not torch.isfinite(loss).all():
             raise FloatingPointError("Loss is Infinite or NaN.")
 
+    def model_zero_grad(self, model_names=None):
+        model_names = self.get_model_names(model_names)
+        for model_name in model_names:
+            if self._optimizers[model_name] is not None:
+                self._optimizers[model_name].zero_grad()
+
+    def model_backward(self, loss):
+        self.detect_abnormal_loss(loss)
+        loss.backward()
+
+    def model_update(self, model_names=None):
+        model_names = self.get_model_names(model_names)
+        for model_name in model_names:
+            if self._optimizers[model_name] is not None:
+                self._optimizers[model_name].step()
+
+    def model_backward_and_update(self, loss, model_names=None):
+        self.model_zero_grad(model_names)
+        self.model_backward(loss)
+        self.model_update(model_names)
+
     def init_writer(self, log_dir):
         if self._writer is None:
             print("Initializing Summary Writer with log_dir={}".format(log_dir))
@@ -163,14 +184,21 @@ class Trainer:
     def get_current_lr(self):
         raise NotImplementedError
 
-    def register_model(
-        self, name="model", model=None, optimizer=None, lr_scheduler=None
+    def model_registeration(
+        self, model_name="model", model=None, optimizer=None, lr_scheduler=None
     ):
-        assert name not in self._models, "Found duplicate model names."
+        assert model_name not in self._models, "Found duplicate model names."
 
-        self._models[name] = model
-        self._optimizers[name] = optimizer
-        self._lr_schedulers[name] = lr_scheduler
+        self._models[model_name] = model
+        self._optimizers[model_name] = optimizer
+        self._lr_schedulers[model_name] = lr_scheduler
+
+    def get_model_names(self, model_names=None):
+        if model_names is not None:
+            for model_name in model_names:
+                assert model_name in list(self._models.keys())
+        else:
+            return list(self._models.keys())
 
     # TODO: Save_Model
     def save_model(
