@@ -9,7 +9,7 @@ from tqdm import tqdm
 
 from datasets import DataManager
 from evaluator import build_evaluator
-from utils import AverageMeter, MetricMeter, save_checkpoint
+from utils import AverageMeter, MetricMeter
 
 
 class Trainer:
@@ -201,7 +201,6 @@ class Trainer:
         else:
             return list(self._models.keys())
 
-    # TODO: Save_Model
     def save_model(
         self,
         current_epoch,
@@ -232,5 +231,17 @@ class Trainer:
             # Save Model
             if not model_name:
                 model_name = "model.pth.tar-" + str(current_epoch)
-            
+            else:
+                model_name = "{}.pth.tar-".format(model_name) + str(current_epoch)
+
             fpath = os.path.join(save_dir, model_name)
+            torch.save(
+                {
+                    "state_dict": model_dict,
+                    "epoch": current_epoch + 1,
+                    "optimizer": optimizer_dict,
+                    "lr_scheduler": lr_scheduler_state_dict,
+                },
+                fpath,
+            )
+            print("Model Saved to: {}".format(fpath))
