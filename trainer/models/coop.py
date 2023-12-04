@@ -185,7 +185,7 @@ class CoOp(Trainer):
         }
 
         if (self.batch_idx + 1) == self.num_batches:
-            self.lr_scheduler.step()
+            self.update_lr()
 
         return loss_summary
 

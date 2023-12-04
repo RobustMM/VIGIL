@@ -46,6 +46,24 @@ class Trainer:
     def build_model(self):
         raise NotImplementedError
 
+    def set_model_mode(self, mode="train", model_names=None):
+        model_names = self.get_model_names(model_names)
+
+        for model_name in model_names:
+            if mode == "train":
+                self._models[model_name].train()
+            elif mode in ["test", "eval"]:
+                self._models[model_name].eval()
+            else:
+                raise KeyError
+
+    def update_lr(self, model_names=None):
+        model_names = self.get_model_names(model_names)
+
+        for model_name in model_names:
+            if self._lr_schedulers[model_name] is not None:
+                self._lr_schedulers[model_name].step()
+
     def detect_abnormal_loss(self, loss):
         if not torch.isfinite(loss).all():
             raise FloatingPointError("Loss is Infinite or NaN.")
@@ -101,7 +119,6 @@ class Trainer:
 
     def after_train(self):
         print("Finish Training")
-        exit()
         self.test()
 
     def run_epoch(self):
@@ -148,9 +165,14 @@ class Trainer:
 
     @torch.no_grad()
     def test(self, split=None):
+        print("Test")
+        self.set_model_mode("eval")
+        self.evaluator.reset()
+
+        exit()
+
         if split is None:
             split = self.cfg.TEST.SPLIT
-
         if split == "Validation" and self.val_loader is not None:
             data_loader = self.data_loader_val
         elif split == "Test":
