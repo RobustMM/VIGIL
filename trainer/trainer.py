@@ -100,7 +100,8 @@ class Trainer:
         self.time_start = time.time()
 
     def after_train(self):
-        # self.save_model()
+        print("Finish Training")
+        exit()
         self.test()
 
     def run_epoch(self):
@@ -228,13 +229,7 @@ class Trainer:
                 new_model_dict[key] = value
             model_dict = new_model_dict
 
-            # Save Model
-            if not model_name:
-                model_name = "model.pth.tar-" + str(current_epoch)
-            else:
-                model_name = "{}.pth.tar-".format(model_name) + str(current_epoch)
-
-            fpath = os.path.join(save_dir, model_name)
+            fpath = os.path.join(save_dir, "model.pth.tar-" + str(current_epoch + 1))
             torch.save(
                 {
                     "state_dict": model_dict,
