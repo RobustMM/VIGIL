@@ -165,11 +165,8 @@ class Trainer:
 
     @torch.no_grad()
     def test(self, split=None):
-        print("Test")
         self.set_model_mode("eval")
         self.evaluator.reset()
-
-        exit()
 
         if split is None:
             split = self.cfg.TEST.SPLIT
@@ -203,7 +200,7 @@ class Trainer:
         raise NotImplementedError
 
     def model_inference(self, input_data):
-        raise NotImplementedError
+        return self.model(input_data)
 
     def get_current_lr(self):
         raise NotImplementedError
