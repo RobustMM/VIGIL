@@ -17,20 +17,17 @@ python train.py --gpu 6 --output-dir output/CLIPZeroshot/Vit_B32/Digit  --datase
 
 VIGIL - CoOp
 python train.py --gpu 6 --seed 42 --output-dir output/CoOp/Vit_B32 --dataset ImageNet --model CoOp --model-config-file config/coop.yaml
-
-# Mismatch
 python train.py --gpu 6 --seed 42 --output-dir output/CoOp/Vit_B32 --dataset ImageNetA --model CoOp --model-config-file config/coop.yaml
 python train.py --gpu 6 --seed 42 --output-dir output/CoOp/Vit_B32 --dataset ImageNetR --model CoOp --model-config-file config/coop.yaml
 python train.py --gpu 6 --seed 42 --output-dir output/CoOp/Vit_B32 --dataset ImageNetV2 --model CoOp --model-config-file config/coop.yaml
 python train.py --gpu 6 --seed 42 --output-dir output/CoOp/Vit_B32 --dataset ImageNetSketch --model CoOp --model-config-file config/coop.yaml
 
-
 CoOp - CoOp
 python train.py --root ./datasets --seed 42 --trainer CoOp --dataset-config-file configs/datasets/imagenet.yaml --config-file configs/trainers/CoOp/vit_b32.yaml --output-dir output/CoOp/vit_b32/imagenet
-
-# Mismatch
 python train.py --root ./datasets --seed 42 --trainer CoOp --dataset-config-file configs/datasets/imagenet_a.yaml --config-file configs/trainers/CoOp/vit_b32.yaml --output-dir output/CoOp/vit_b32/imagenet
 python train.py --root ./datasets --seed 42 --trainer CoOp --dataset-config-file configs/datasets/imagenet_r.yaml --config-file configs/trainers/CoOp/vit_b32.yaml --output-dir output/CoOp/vit_b32/imagenet
 python train.py --root ./datasets --seed 42 --trainer CoOp --dataset-config-file configs/datasets/imagenetv2.yaml --config-file configs/trainers/CoOp/vit_b32.yaml --output-dir output/CoOp/vit_b32/imagenet
 python train.py --root ./datasets --seed 42 --trainer CoOp --dataset-config-file configs/datasets/imagenet_sketch.yaml --config-file configs/trainers/CoOp/vit_b32.yaml --output-dir output/CoOp/vit_b32/imagenet
 
+VIGIL-DG CoOp
+python train.py --gpu 6 --seed 42 --output-dir output/Digits_CoOp_Vit_B32 --dataset Digits --source-domains mnist_m svhn syn --target-domains mnist --model CoOp --model-config-file config/coop.yaml
