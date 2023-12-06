@@ -96,6 +96,12 @@ def get_cfg_default():
     _C.MODEL.CoOp.PREC = "fp16"
     _C.MODEL.CoOp.CLASS_TOKEN_POSITION = "end"
 
+    # CoCoOp
+    _C.MODEL.CoCoOp = CN()
+    _C.MODEL.CoCoOp.BACKBONE = "ViT-B/32"
+    _C.MODEL.CoCoOp.N_CTX = 16
+    _C.MODEL.CoCoOp.PREC = "fp16"
+
     # ====================
     # Optimizer CfgNode
     # ====================
