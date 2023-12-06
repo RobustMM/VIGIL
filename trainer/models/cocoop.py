@@ -1,17 +1,41 @@
 import os
 
+import torch
 import torch.nn as nn
 from clip import clip
 
 from trainer import MODEL_REGISTRY, Trainer
 
 
+# TODO: PromptLearner
+class PromptLearner(nn.Module):
+    def __init__(self, cfg, class_names, clip_model):
+        super().__init__()
+        self.n_cls = len(class_names)
+        self.n_ctx = cfg.MODEL.CoCoOp.N_CTX
+
+        ctx_dim = clip_model.ln_final.weight.shape[0]
+        vls_dim = clip_model.visual.output_dim
+
+        # Random Initialization Context
+        ctx_vectors = torch.empty(self.n_ctx, ctx_dim, dtype=clip_model.dtype)
+        nn.init.normal_(ctx_vectors, std=0.02)
+        prompt_prefix = " ".join(["X"] * self.n_ctx)
+        print("Initial Context: {}".format(prompt_prefix))
+        print("Number of Context Tokens: {}".format(self.n_ctx))
+        self.ctx = nn.Parameter(ctx_vectors)  # To be optimized
+
+        
+        exit()
+
+        self.dtype = clip_model.dtype
+
+
 # TODO: CustomCLIP
 class CustomCLIP(nn.Module):
     def __init__(self, cfg, class_names, clip_model):
         super().__init__()
-        print("Hi")
-        exit()
+        self.prompt_learner = PromptLearner(cfg, class_names, clip_model)
 
 
 @MODEL_REGISTRY.register()

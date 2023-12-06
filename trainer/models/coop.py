@@ -89,6 +89,7 @@ class PromptLearner(nn.Module):
         )  # CLS and EOS
 
         self.class_token_position = cfg.MODEL.CoOp.CLASS_TOKEN_POSITION
+        self.dtype = clip_model.dtype
 
     def forward(self):
         ctx = self.ctx
