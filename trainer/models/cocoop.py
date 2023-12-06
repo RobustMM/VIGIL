@@ -1,4 +1,5 @@
 import os
+from collections import OrderedDict
 
 import torch
 import torch.nn as nn
@@ -15,7 +16,7 @@ class PromptLearner(nn.Module):
         self.n_ctx = cfg.MODEL.CoCoOp.N_CTX
 
         ctx_dim = clip_model.ln_final.weight.shape[0]
-        vls_dim = clip_model.visual.output_dim
+        vis_dim = clip_model.visual.output_dim
 
         # Random Initialization Context
         ctx_vectors = torch.empty(self.n_ctx, ctx_dim, dtype=clip_model.dtype)
@@ -25,7 +26,21 @@ class PromptLearner(nn.Module):
         print("Number of Context Tokens: {}".format(self.n_ctx))
         self.ctx = nn.Parameter(ctx_vectors)  # To be optimized
 
-        
+        self.meta_net = nn.Sequential(
+            OrderedDict(
+                [
+                    ("linear1", nn.Linear(vis_dim, vis_dim // 16)),
+                    ("relu", nn.ReLU(inplace=True)),
+                    ("linear2", nn.Linear(vis_dim // 16, ctx_dim)),
+                ]
+            )
+        )
+
+        if cfg.MODEL.CoCoOp.PREC == "fp16":
+            self.meta_net.half()
+
+        class_names = [class_name.replace("_", " ") for class_name in class_names]
+
         exit()
 
         self.dtype = clip_model.dtype
