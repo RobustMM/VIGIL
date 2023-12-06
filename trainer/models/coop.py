@@ -143,6 +143,7 @@ class CoOp(Trainer):
     """
 
     def build_model(self):
+        print("Loading CLIP Backbone: {}".format(self.cfg.MODEL.CoOp.BACKBONE))
         clip_model, _ = clip.load(
             self.cfg.MODEL.CoOp.BACKBONE,
             device="cpu",
