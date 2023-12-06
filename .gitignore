@@ -14,7 +14,6 @@ python train.py --root ./datasets --trainer ZeroshotCLIP --dataset-config-file c
 VIGIL - CLIPLinearProbe
 python train.py --gpu 6 --output-dir output/CLIPZeroshot/Vit_B32/Digit  --dataset Digits --source-domains mnist_m svhn syn --target-domains mnist --model CLIPLinearProbe --model-config-file config/cliplinearprobe.yaml
 
-
 VIGIL - CoOp
 python train.py --gpu 6 --seed 42 --output-dir output/CoOp/Vit_B32 --dataset ImageNet --model CoOp --model-config-file config/coop.yaml
 python train.py --gpu 6 --seed 42 --output-dir output/CoOp/Vit_B32 --dataset ImageNetA --model CoOp --model-config-file config/coop.yaml
@@ -29,5 +28,12 @@ python train.py --root ./datasets --seed 42 --trainer CoOp --dataset-config-file
 python train.py --root ./datasets --seed 42 --trainer CoOp --dataset-config-file configs/datasets/imagenetv2.yaml --config-file configs/trainers/CoOp/vit_b32.yaml --output-dir output/CoOp/vit_b32/imagenet
 python train.py --root ./datasets --seed 42 --trainer CoOp --dataset-config-file configs/datasets/imagenet_sketch.yaml --config-file configs/trainers/CoOp/vit_b32.yaml --output-dir output/CoOp/vit_b32/imagenet
 
-VIGIL-DG CoOp
+VIGIL - DG CoOp
 python train.py --gpu 6 --seed 42 --output-dir output/Digits_CoOp_Vit_B32 --dataset Digits --source-domains mnist_m svhn syn --target-domains mnist --model CoOp --model-config-file config/coop.yaml
+
+CoOp - CoCoOp
+python train.py --root ./datasets --seed 42 --trainer CoCoOp --dataset-config-file configs/datasets/imagenet_a.yaml --config-file configs/trainers/CoCoOp/vit_b32.yaml --output-dir output/CoCoOp/
+
+
+VIGIL - CoCoOp
+python train.py --gpu 6 --seed 42 --output-dir output/CoCoOp --dataset ImageNetA --model CoCoOp --model-config-file config/cocoop.yaml
