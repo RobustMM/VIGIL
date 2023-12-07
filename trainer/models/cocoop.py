@@ -11,6 +11,32 @@ from trainer import MODEL_REGISTRY, Trainer
 _tokenizer = SimpleTokenizer()
 
 
+class CustomTextEncoder(nn.Module):
+    def __init__(self, clip_model):
+        super().__init__()
+        self.transformer = clip_model.transformer
+        self.positional_embedding = clip_model.positional_embedding
+        self.ln_final = clip_model.ln_final
+        self.text_projection = clip_model.text_projection
+        self.dtype = clip_model.dtype
+
+    def forward(self, prompts, prompts_tokenized):
+        x = prompts + self.positional_embedding.type(self.dtype)
+        x = x.permute(1, 0, 2)  # NLD -> LND
+        x = self.transformer(x)
+        x = x.permute(1, 0, 2)  # LND -> NLD
+        x = self.ln_final(x).type(self.dtype)
+
+        # x.shape = [batch_size, n_ctx, transformer.width]
+        # take features from the eot embedding (eot_token is the highest number in each sequence)
+        x = (
+            x[torch.arange(x.shape[0]), prompts_tokenized.argmax(dim=-1)]
+            @ self.text_projection
+        )
+
+        return x
+
+
 class PromptLearner(nn.Module):
     def __init__(self, cfg, class_names, clip_model):
         super().__init__()
@@ -71,14 +97,19 @@ class PromptLearner(nn.Module):
         pass
 
 
-# TODO: CustomCLIP
 class CustomCLIP(nn.Module):
     def __init__(self, cfg, class_names, clip_model):
         super().__init__()
         self.prompt_learner = PromptLearner(cfg, class_names, clip_model)
-        
-        
-        exit()
+        self.promptes_tokenized = self.prompt_learner.prompts_tokenized
+        self.image_encoder = clip_model.visual
+        self.text_encoder = CustomTextEncoder(clip_model)
+        self.logit_scale = clip_model.logit_scale
+        self.dtype = clip_model.dtype
+
+    # TODO: CustomCLIP - Forward
+    def forward(self, image, label=None):
+        pass
 
 
 @MODEL_REGISTRY.register()
