@@ -161,6 +161,13 @@ class CoOp(Trainer):
             if "prompt_learner" not in name:
                 param.requires_grad_(False)
 
+        # Double check
+        enabled_params = set()
+        for name, param in self.model.named_parameters():
+            if param.requires_grad:
+                enabled_params.add(name)
+        print("Parameters to be updated: {}".format(enabled_params))
+
         self.model.to(self.device)
 
         # NOTE: Only Give prompt_learner to the Optimizer
