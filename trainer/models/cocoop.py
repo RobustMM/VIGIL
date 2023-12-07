@@ -67,9 +67,6 @@ class PromptLearner(nn.Module):
             )
         )
 
-        if cfg.MODEL.CoCoOp.PREC == "fp16":
-            self.meta_net.half()
-
         class_names = [class_name.replace("_", " ") for class_name in class_names]
         self.class_name_lens = [
             len(_tokenizer.encode(class_name)) for class_name in class_names
@@ -96,8 +93,16 @@ class PromptLearner(nn.Module):
         pass
 
     # TODO: PromptLearner - Forward
-    def forward(self, im_features):
-        pass
+    def forward(self, image_features):
+        print("Prompt Learner Forward")
+
+        ctx = self.ctx
+        ctx = ctx.unsqueeze(0)
+        bias = self.meta_net(image_features)
+        bias = bias.unsqueeze(1)
+        ctx_shifted = ctx + bias
+        print(ctx_shifted)
+        exit()
 
 
 class CustomCLIP(nn.Module):
@@ -111,8 +116,13 @@ class CustomCLIP(nn.Module):
         self.dtype = clip_model.dtype
 
     # TODO: CustomCLIP - Forward
-    def forward(self, image, label=None):
+    def forward(self, image):
         print("CustomCLIP Forward")
+
+        image_features = self.image_encoder(image.type(self.dtype))
+        image_features = image_features / image_features.norm(dim=-1, keepdim=True)
+
+        prompts = self.prompt_learner(image_features)
         exit()
 
 
