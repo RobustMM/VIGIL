@@ -6,6 +6,7 @@ import torch.nn as nn
 from clip import clip
 from clip.simple_tokenizer import SimpleTokenizer
 
+from optim import build_lr_scheduler, build_optimizer
 from trainer import MODEL_REGISTRY, Trainer
 
 _tokenizer = SimpleTokenizer()
@@ -114,7 +115,6 @@ class CustomCLIP(nn.Module):
 
 @MODEL_REGISTRY.register()
 class CoCoOp(Trainer):
-    # TODO: CoCoOp - Build_Model
     def build_model(self):
         print("Loading CLIP Backbone: {}".format(self.cfg.MODEL.CoCoOp.BACKBONE))
         clip_model, _ = clip.load(
@@ -141,4 +141,18 @@ class CoCoOp(Trainer):
         print("Parameters to be updated: {}".format(enabled_params))
 
         self.model.to(self.device)
-        exit()
+
+        # NOTE: Only Give prompt_learner to the Optimizer
+        self.optimizer = build_optimizer(self.model.prompt_learner, self.cfg.OPTIM)
+        self.lr_scheduler = build_lr_scheduler(self.optimizer, self.cfg.OPTIM)
+
+        self.model_registeration(
+            "prompt_learner",
+            self.model.prompt_learner,
+            self.optimizer,
+            self.lr_scheduler,
+        )
+
+    # TODO: CoCoOp - Forward Backward
+    def forward_backward(self, batch_data):
+        pass
