@@ -4,8 +4,11 @@ from collections import OrderedDict
 import torch
 import torch.nn as nn
 from clip import clip
+from clip.simple_tokenizer import SimpleTokenizer
 
 from trainer import MODEL_REGISTRY, Trainer
+
+_tokenizer = SimpleTokenizer()
 
 
 # TODO: PromptLearner
@@ -40,9 +43,25 @@ class PromptLearner(nn.Module):
             self.meta_net.half()
 
         class_names = [class_name.replace("_", " ") for class_name in class_names]
+        self.class_name_lens = [
+            len(_tokenizer.encode(class_name)) for class_name in class_names
+        ]
+        prompts = [prompt_prefix + " " + class_name + "." for class_name in class_names]
+        self.prompts_tokenized = torch.cat(
+            [clip.tokenize(prompt) for prompt in prompts]
+        )
 
-        exit()
+        with torch.no_grad():
+            prompts_embedding = clip_model.token_embedding(self.prompts_tokenized).type(
+                clip_model.dtype
+            )
 
+        self.register_buffer("token_prefix", prompts_embedding[:, :1, :])  # SOS
+        self.register_buffer(
+            "token_suffix", prompts_embedding[:, 1 + self.n_ctx :, :]
+        )  # CLS and EOS
+
+        self.class_token_position = cfg.MODEL.CoOp.CLASS_TOKEN_POSITION
         self.dtype = clip_model.dtype
 
 
