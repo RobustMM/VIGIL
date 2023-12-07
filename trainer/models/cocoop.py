@@ -11,7 +11,6 @@ from trainer import MODEL_REGISTRY, Trainer
 _tokenizer = SimpleTokenizer()
 
 
-# TODO: PromptLearner
 class PromptLearner(nn.Module):
     def __init__(self, cfg, class_names, clip_model):
         super().__init__()
@@ -61,8 +60,15 @@ class PromptLearner(nn.Module):
             "token_suffix", prompts_embedding[:, 1 + self.n_ctx :, :]
         )  # CLS and EOS
 
-        self.class_token_position = cfg.MODEL.CoOp.CLASS_TOKEN_POSITION
         self.dtype = clip_model.dtype
+
+    # TODO: PromptLearner - Construct Prompts
+    def construct_prompts(self, ctx, prefix, suffix, label=None):
+        pass
+
+    # TODO: PromptLearner - Forward
+    def forward(self, im_features):
+        pass
 
 
 # TODO: CustomCLIP
@@ -70,6 +76,9 @@ class CustomCLIP(nn.Module):
     def __init__(self, cfg, class_names, clip_model):
         super().__init__()
         self.prompt_learner = PromptLearner(cfg, class_names, clip_model)
+        
+        
+        exit()
 
 
 @MODEL_REGISTRY.register()
