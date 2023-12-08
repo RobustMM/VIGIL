@@ -88,21 +88,27 @@ class PromptLearner(nn.Module):
 
         self.dtype = clip_model.dtype
 
-    # TODO: PromptLearner - Construct Prompts
-    def construct_prompts(self, ctx, prefix, suffix, label=None):
-        pass
-
-    # TODO: PromptLearner - Forward
     def forward(self, image_features):
         print("Prompt Learner Forward")
 
-        ctx = self.ctx
-        ctx = ctx.unsqueeze(0)
-        bias = self.meta_net(image_features)
-        bias = bias.unsqueeze(1)
-        ctx_shifted = ctx + bias
-        print(ctx_shifted)
-        exit()
+        ctx = self.ctx  # (n_ctx, ctx_dim)
+        ctx = ctx.unsqueeze(0)  # (1, n_ctx, ctx_dim)
+        bias = self.meta_net(image_features)  # (batch_size, ctx_dim)
+        bias = bias.unsqueeze(1)  # (batch_size, 1, ctx_dim)
+        ctx_shifted = ctx + bias  # (batch_size, n_ctx, ctx_dim)
+
+        prefix = self.token_prefix
+        suffix = self.token_suffix
+
+        prompts = []
+        for ctx_shifted_i in ctx_shifted:
+            ctx_i = ctx_shifted_i.unsqueeze(0).expand(self.n_cls, -1, -1)
+            prompt_i = torch.cat([prefix, ctx_i, suffix], dim=1)
+            prompts.append(prompt_i)
+
+        prompts = torch.stack(prompts)
+
+        return prompts
 
 
 class CustomCLIP(nn.Module):
