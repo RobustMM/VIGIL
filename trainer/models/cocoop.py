@@ -89,8 +89,6 @@ class PromptLearner(nn.Module):
         self.dtype = clip_model.dtype
 
     def forward(self, image_features):
-        print("Prompt Learner Forward")
-
         ctx = self.ctx  # (n_ctx, ctx_dim)
         ctx = ctx.unsqueeze(0)  # (1, n_ctx, ctx_dim)
         bias = self.meta_net(image_features)  # (batch_size, ctx_dim)
@@ -103,8 +101,8 @@ class PromptLearner(nn.Module):
         prompts = []
         for ctx_shifted_i in ctx_shifted:
             ctx_i = ctx_shifted_i.unsqueeze(0).expand(self.n_cls, -1, -1)
-            prompt_i = torch.cat([prefix, ctx_i, suffix], dim=1)
-            prompts.append(prompt_i)
+            prompts_i = torch.cat([prefix, ctx_i, suffix], dim=1)
+            prompts.append(prompts_i)
 
         prompts = torch.stack(prompts)
 
@@ -115,7 +113,7 @@ class CustomCLIP(nn.Module):
     def __init__(self, cfg, class_names, clip_model):
         super().__init__()
         self.prompt_learner = PromptLearner(cfg, class_names, clip_model)
-        self.promptes_tokenized = self.prompt_learner.prompts_tokenized
+        self.prompts_tokenized = self.prompt_learner.prompts_tokenized
         self.image_encoder = clip_model.visual
         self.text_encoder = CustomTextEncoder(clip_model)
         self.logit_scale = clip_model.logit_scale
@@ -123,12 +121,16 @@ class CustomCLIP(nn.Module):
 
     # TODO: CustomCLIP - Forward
     def forward(self, image):
-        print("CustomCLIP Forward")
-
         image_features = self.image_encoder(image.type(self.dtype))
         image_features = image_features / image_features.norm(dim=-1, keepdim=True)
 
         prompts = self.prompt_learner(image_features)
+
+        logit_scale = self.logit_scale.exp()
+        logits = []
+
+        for prompts_i, image_features_i in zip(prompts, image_features):
+            text_features_i = self.text_encoder(prompts_i, self.prompts_tokenized)
         exit()
 
 

@@ -114,7 +114,7 @@ class CustomCLIP(nn.Module):
         super().__init__()
 
         self.prompt_learner = PromptLearner(cfg, class_names, clip_model)
-        self.promptes_tokenized = self.prompt_learner.prompts_tokenized
+        self.prompts_tokenized = self.prompt_learner.prompts_tokenized
         self.image_encoder = clip_model.visual
         self.text_encoder = CustomTextEncoder(clip_model)
         self.logit_scale = clip_model.logit_scale
@@ -124,7 +124,7 @@ class CustomCLIP(nn.Module):
         image_features = self.image_encoder(image.type(self.dtype))
 
         prompts = self.prompt_learner()
-        text_features = self.text_encoder(prompts, self.promptes_tokenized)
+        text_features = self.text_encoder(prompts, self.prompts_tokenized)
 
         image_features = image_features / image_features.norm(dim=-1, keepdim=True)
         text_features = text_features / text_features.norm(dim=-1, keepdim=True)
