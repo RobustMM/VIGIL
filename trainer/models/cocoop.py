@@ -184,6 +184,7 @@ class CoCoOp(Trainer):
         image, class_label = self.parse_batch_train(batch_data)
         output = self.model(image)
         loss = F.cross_entropy(output, class_label)
+        # print(loss)
 
         self.model_backward_and_update(loss)
 
