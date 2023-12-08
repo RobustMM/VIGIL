@@ -34,6 +34,8 @@ python train.py --gpu 6 --seed 42 --output-dir output/Digits_CoOp_Vit_B32 --data
 CoOp - CoCoOp
 python train.py --root ./datasets --seed 42 --trainer CoCoOp --dataset-config-file configs/datasets/imagenet_a.yaml --config-file configs/trainers/CoCoOp/vit_b32.yaml --output-dir output/CoCoOp/
 
-
 VIGIL - CoCoOp
 python train.py --gpu 6 --seed 42 --output-dir output/CoCoOp --dataset ImageNetA --model CoCoOp --model-config-file config/cocoop.yaml
+
+VIGIL - DG CoCoOp
+python train.py --gpu 6 --seed 42 --output-dir output/CoCoOp --dataset Digits --source-domains mnist_m svhn syn --target-domains mnist --model CoCoOp --model-config-file config/cocoop.yaml
