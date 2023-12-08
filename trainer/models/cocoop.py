@@ -119,7 +119,6 @@ class CustomCLIP(nn.Module):
         self.logit_scale = clip_model.logit_scale
         self.dtype = clip_model.dtype
 
-    # TODO: CustomCLIP - Forward
     def forward(self, image):
         image_features = self.image_encoder(image.type(self.dtype))
         image_features = image_features / image_features.norm(dim=-1, keepdim=True)
@@ -131,7 +130,14 @@ class CustomCLIP(nn.Module):
 
         for prompts_i, image_features_i in zip(prompts, image_features):
             text_features_i = self.text_encoder(prompts_i, self.prompts_tokenized)
-        exit()
+            text_features_i = text_features_i / text_features_i.norm(
+                dim=-1, keepdim=True
+            )
+            logits_i = logit_scale * image_features_i @ text_features_i.t()
+            logits.append(logits_i)
+        logits = torch.stack(logits)
+
+        return logits
 
 
 @MODEL_REGISTRY.register()
